@@ -81,7 +81,7 @@ public class NState {
     private void onTransitionClicked(){
         sideMenu.gettLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                stateType=StateType.Transition;
+
 
                 addTransition();
             }
@@ -130,8 +130,8 @@ public class NState {
 
     private void addTransition(){
         arrow.setFill(Color.RED);
-        circle.setOnMouseClicked(event-> {
-            double startX = event.getScreenX();
+
+            double startX = this.circle.getRadius();
             double startY=0;
             arrow.getPoints().addAll(
                     startX, startY - 20,
@@ -140,7 +140,7 @@ public class NState {
                     startX + 10, startY + 10,
                     startX, startY + 20
             );
-        });
+
 
         this.circle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){

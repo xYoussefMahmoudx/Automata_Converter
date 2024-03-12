@@ -6,5 +6,4 @@ public enum StateType {
         Final,
         Start,
 
-        Transition
 }
