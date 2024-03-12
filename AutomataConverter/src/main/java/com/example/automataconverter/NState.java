@@ -1,6 +1,7 @@
 package com.example.automataconverter;
 
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -26,7 +27,8 @@ public class NState {
         this.circle = new Circle(radius);
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
-        this.arrow= new Polygon();
+        arrow=new Polygon();
+
         this.line = new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20);
         createNode();
         onNormalClicked();
@@ -34,6 +36,7 @@ public class NState {
         onNodeDragged();
         onRemoveClicked();
         onTransitionClicked();
+        onArrowDragged();
     }
     public void setAnchorCallBack(RemoveNode callBack){
         this.anchorPaneCallBack=callBack;
@@ -50,6 +53,7 @@ public class NState {
 
 
     }
+
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -89,6 +93,7 @@ public class NState {
 
 
     }
+
     private void onNodeDragged(){
         this.circle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
@@ -96,6 +101,8 @@ public class NState {
                 sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
             }
         });
+
+
         circle.setOnMouseDragged(event-> {
             circle.setCenterX(event.getX());
             circle.setCenterY(event.getY());
@@ -103,6 +110,8 @@ public class NState {
             innerCircle.setCenterY(event.getY());
         });
     }
+
+
 
     private void makeFinal(){
         // Inner Circle (white fill)
@@ -129,16 +138,16 @@ public class NState {
     }
 
     private void addTransition(){
+
         arrow.setFill(Color.RED);
 
-            double startX = this.circle.getRadius();
-            double startY=0;
+            double startX = this.circle.getCenterX()+50;
+            double startY=circle.getCenterY();
             arrow.getPoints().addAll(
                     startX, startY - 20,
                     startX + 10, startY - 10,
-                    startX, startY,
-                    startX + 10, startY + 10,
-                    startX, startY + 20
+                    startX, startY
+
             );
 
 
@@ -170,12 +179,36 @@ public class NState {
         arrayCallBack.apply().remove(this);
     }
 
-    public Polygon getArrow() {
-        return arrow;
-    }
 
     public Line getLine() {
         return line;
     }
+
+    private void onArrowDragged() {
+
+
+
+        arrow.setOnMouseDragged(event-> {
+            arrow.getPoints().setAll(
+                    event.getX(), event.getY() - 20,
+                    event.getX() + 10, event.getY() - 10,
+                    event.getX(), event.getY()
+            );
+            line.setFill(Color.RED);
+            line.setStartX(this.circle.getCenterX()+50);
+            line.setStartY(circle.getCenterY());
+            line.setEndX(event.getX());
+            line.setEndY(event.getY()-10);
+
+
+
+        });
+
+    }
+
+    public Polygon getArrow() {
+        return arrow;
+    }
+
 }
 
