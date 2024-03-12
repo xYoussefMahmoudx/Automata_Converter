@@ -3,6 +3,8 @@ package com.example.automataconverter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Line;
 
 
 public class NState {
@@ -13,6 +15,9 @@ public class NState {
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
 
+    private Polygon arrow;
+    private Line line;
+
 
 
 
@@ -21,11 +26,14 @@ public class NState {
         this.circle = new Circle(radius);
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
+        this.arrow= new Polygon();
+        this.line = new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20);
         createNode();
         onNormalClicked();
         onFinalClicked();
         onNodeDragged();
         onRemoveClicked();
+        onTransitionClicked();
     }
     public void setAnchorCallBack(RemoveNode callBack){
         this.anchorPaneCallBack=callBack;
@@ -69,6 +77,18 @@ public class NState {
             }
         });
     }
+
+    private void onTransitionClicked(){
+        sideMenu.gettLabel().setOnMouseClicked(e-> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+                stateType=StateType.Transition;
+
+                addTransition();
+            }
+        });
+
+
+    }
     private void onNodeDragged(){
         this.circle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
@@ -108,7 +128,29 @@ public class NState {
 
     }
 
+    private void addTransition(){
+        arrow.setFill(Color.RED);
+        circle.setOnMouseClicked(event-> {
+            double startX = event.getScreenX();
+            double startY=0;
+            arrow.getPoints().addAll(
+                    startX, startY - 20,
+                    startX + 10, startY - 10,
+                    startX, startY,
+                    startX + 10, startY + 10,
+                    startX, startY + 20
+            );
+        });
 
+        this.circle.setOnMouseClicked(e->{
+            if(e.getButton() == MouseButton.SECONDARY){
+                System.out.println("Hello There");
+                sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
+            }
+        });
+
+        //this.line.setStroke(Color.RED);
+    }
 
     private void makeNormal(){
         innerCircle.setStroke(Color.TRANSPARENT); // Black border
@@ -128,6 +170,12 @@ public class NState {
         arrayCallBack.apply().remove(this);
     }
 
+    public Polygon getArrow() {
+        return arrow;
+    }
 
+    public Line getLine() {
+        return line;
+    }
 }
 

@@ -24,7 +24,7 @@ public class HelloController {
 
         NState s = new NState(50);
         Nodes.add(s);
-        test.getChildren().addAll(s.getCircle(), s.getInnerCircle());
+        test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getArrow(),s.getLine());
         s.setAnchorCallBack(()->returnAnchorFunction());
         s.setArrayCallBack(()->returnArrayFunction());
 
