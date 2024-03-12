@@ -33,9 +33,13 @@ public class HelloController {
 
         //Circle c = new Circle(30,Color.RED);
         //circles.add(c);
-        NState s = new NState(30,'n');
-        test.getChildren().add(s.getCircle());
+        NState s = new NState(50);
+        test.getChildren().addAll(s.getCircle(), s.getInnerCircle());
 
 
     }
+
+
+
+
 }
