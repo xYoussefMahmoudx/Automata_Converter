@@ -24,6 +24,7 @@ public class NState {
         stateName = new Label();
         stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
         stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
+        stateName.toBack();
         innerCircle.centerXProperty().bind(circle.centerXProperty());
         innerCircle.centerYProperty().bind(circle.centerYProperty());
         createNode();
@@ -89,7 +90,7 @@ public class NState {
             stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
             stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
         });
-        
+
     }
 
     private void makeFinal(){

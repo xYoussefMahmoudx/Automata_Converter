@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class HelloController {
         root = loader.load();
         stateNameInputController c = loader.getController();
         stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
