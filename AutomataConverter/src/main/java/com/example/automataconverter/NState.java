@@ -1,5 +1,6 @@
 package com.example.automataconverter;
 
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -9,11 +10,10 @@ public class NState {
     private Circle circle;
     private Circle innerCircle;
     private StateType stateType;
+    private Label stateName;
     private NSideMenu sideMenu;
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
-
-
 
 
     public NState(double radius) {
@@ -21,6 +21,14 @@ public class NState {
         this.circle = new Circle(radius);
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
+        //stateName = new Label();
+        //setStateName("Hello");
+        //stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
+        //stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
+        //stateName.layoutXProperty().bind(circle.centerXProperty().subtract(stateName.getWidth()/2));
+        //stateName.layoutYProperty().bind(circle.centerYProperty().subtract(stateName.getHeight()/2));
+        innerCircle.centerXProperty().bind(circle.centerXProperty());
+        innerCircle.centerYProperty().bind(circle.centerYProperty());
         createNode();
         onNormalClicked();
         onFinalClicked();
@@ -38,9 +46,6 @@ public class NState {
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(2);
         this.stateType = StateType.Normal;
-
-
-
     }
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
@@ -62,13 +67,12 @@ public class NState {
     private void onRemoveClicked(){
         sideMenu.getrLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-
                 anchorPaneCallBack.apply().getChildren().removeAll(this.innerCircle,this.circle);
                 deleteNode();
-
             }
         });
     }
+
     private void onNodeDragged(){
         this.circle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
@@ -79,26 +83,19 @@ public class NState {
         circle.setOnMouseDragged(event-> {
             circle.setCenterX(event.getX());
             circle.setCenterY(event.getY());
-            innerCircle.setCenterX(event.getX());
-            innerCircle.setCenterY(event.getY());
+        });
+        innerCircle.setOnMouseDragged(event-> {
+            circle.setCenterX(event.getX());
+            circle.setCenterY(event.getY());
         });
     }
 
     private void makeFinal(){
         // Inner Circle (white fill)
-
         innerCircle.setRadius(40); // Set smaller radius
-        innerCircle.setCenterX(circle.getCenterX());
-        innerCircle.setCenterY(circle.getCenterY());
         innerCircle.setFill(Color.WHITE); // White fill
         innerCircle.setStroke(Color.BLACK); // Black border
         innerCircle.setStrokeWidth(2); // Border width
-        innerCircle.setOnMouseDragged(event-> {
-            circle.setCenterX(event.getX());
-            circle.setCenterY(event.getY());
-            innerCircle.setCenterX(event.getX());
-            innerCircle.setCenterY(event.getY());
-        });
         this.innerCircle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
                 System.out.println("Hello There");
@@ -129,5 +126,12 @@ public class NState {
     }
 
 
+    public Label getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName.setText(stateName);
+    }
 }
 
