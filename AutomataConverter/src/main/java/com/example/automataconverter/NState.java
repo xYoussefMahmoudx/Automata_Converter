@@ -21,12 +21,9 @@ public class NState {
         this.circle = new Circle(radius);
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
-        //stateName = new Label();
-        //setStateName("Hello");
-        //stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
-        //stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
-        //stateName.layoutXProperty().bind(circle.centerXProperty().subtract(stateName.getWidth()/2));
-        //stateName.layoutYProperty().bind(circle.centerYProperty().subtract(stateName.getHeight()/2));
+        stateName = new Label();
+        stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
+        stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
         innerCircle.centerXProperty().bind(circle.centerXProperty());
         innerCircle.centerYProperty().bind(circle.centerYProperty());
         createNode();
@@ -83,11 +80,16 @@ public class NState {
         circle.setOnMouseDragged(event-> {
             circle.setCenterX(event.getX());
             circle.setCenterY(event.getY());
+            stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
+            stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
         });
         innerCircle.setOnMouseDragged(event-> {
             circle.setCenterX(event.getX());
             circle.setCenterY(event.getY());
+            stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
+            stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
         });
+        
     }
 
     private void makeFinal(){
