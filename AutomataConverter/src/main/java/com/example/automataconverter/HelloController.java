@@ -28,7 +28,7 @@ public class HelloController {
     int counter = 0;
     @FXML
     public void spawn() throws IOException {
-        NState s = new NState(50);
+        NState s = new NState(50,StateType.Normal);
         showStateNameScreen(s);
         Nodes.add(s);
         test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());

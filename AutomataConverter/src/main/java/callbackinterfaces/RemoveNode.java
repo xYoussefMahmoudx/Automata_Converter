@@ -1,4 +1,4 @@
-package com.example.automataconverter;
+package callbackinterfaces;
 
 import javafx.scene.layout.AnchorPane;
 
