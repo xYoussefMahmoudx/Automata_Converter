@@ -16,9 +16,10 @@ public class NState {
     private RemoveNodeFromArray arrayCallBack;
 
 
-    public NState(double radius) {
+    public NState(double radius,StateType stateType) {
 
         this.circle = new Circle(radius);
+        this.stateType=stateType;
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
         stateName = new Label();
@@ -32,6 +33,9 @@ public class NState {
         onFinalClicked();
         onNodeDragged();
         onRemoveClicked();
+        if(stateType.equals(StateType.Final)){
+            makeFinal();
+        }
     }
     public void setAnchorCallBack(RemoveNode callBack){
         this.anchorPaneCallBack=callBack;
@@ -43,7 +47,7 @@ public class NState {
         circle.setFill(Color.WHITE);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(2);
-        this.stateType = StateType.Normal;
+        //this.stateType = StateType.Normal;
     }
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
@@ -74,8 +78,8 @@ public class NState {
     private void onNodeDragged(){
         this.circle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
-                System.out.println("Hello There");
                 sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
+                e.consume();
             }
         });
         circle.setOnMouseDragged(event-> {
@@ -101,8 +105,8 @@ public class NState {
         innerCircle.setStrokeWidth(2); // Border width
         this.innerCircle.setOnMouseClicked(e->{
             if(e.getButton() == MouseButton.SECONDARY){
-                System.out.println("Hello There");
                 sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
+                e.consume();
             }
         });
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainCanvas" onMouseClicked="#onRightClicked" prefHeight="666.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.automataconverter.NfaCanvas">
+   <children>
+      <Button fx:id="convertToDFABtn" layoutX="767.0" layoutY="602.0" mnemonicParsing="false" onAction="#convertToDFA" prefHeight="49.0" prefWidth="103.0" text="Convert to DFA" />
+   </children>
+</AnchorPane>
