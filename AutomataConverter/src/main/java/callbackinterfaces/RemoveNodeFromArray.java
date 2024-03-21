@@ -1,4 +1,6 @@
-package com.example.automataconverter;
+package callbackinterfaces;
+
+import com.example.automataconverter.NState;
 
 import java.util.ArrayList;
 
