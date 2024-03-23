@@ -5,4 +5,6 @@ module com.example.automata_converter {
 
     opens com.example.automataconverter to javafx.fxml;
     exports com.example.automataconverter;
+    exports callbackinterfaces;
+    opens callbackinterfaces to javafx.fxml;
 }
