@@ -31,7 +31,7 @@ public class HelloController {
         NState s = new NState(50,StateType.Normal);
         showStateNameScreen(s);
         Nodes.add(s);
-        test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+        test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
         s.setAnchorCallBack(()->returnAnchorFunction());
         s.setArrayCallBack(()->returnArrayFunction());
     }

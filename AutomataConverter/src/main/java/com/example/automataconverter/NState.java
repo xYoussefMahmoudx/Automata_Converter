@@ -4,8 +4,11 @@ import callbackinterfaces.RemoveNode;
 import callbackinterfaces.RemoveNodeFromArray;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Line;
 
 
 public class NState {
@@ -30,11 +33,16 @@ public class NState {
         stateName.toBack();
         innerCircle.centerXProperty().bind(circle.centerXProperty());
         innerCircle.centerYProperty().bind(circle.centerYProperty());
+        arrow=new Polygon();
+
+        this.line = new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20);
         createNode();
         onNormalClicked();
         onFinalClicked();
         onNodeDragged();
         onRemoveClicked();
+        onTransitionClicked();
+        onArrowDragged();
         if(stateType.equals(StateType.Final)){
             makeFinal();
         }
@@ -51,6 +59,7 @@ public class NState {
         circle.setStrokeWidth(2);
         //this.stateType = StateType.Normal;
     }
+
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -84,6 +93,8 @@ public class NState {
                 e.consume();
             }
         });
+
+
         circle.setOnMouseDragged(event-> {
             circle.setCenterX(event.getX());
             circle.setCenterY(event.getY());
@@ -96,6 +107,18 @@ public class NState {
             stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
             stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
         });
+
+    }
+
+    private void onTransitionClicked(){
+        sideMenu.gettLabel().setOnMouseClicked(e-> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+
+
+                addTransition();
+            }
+        });
+
 
     }
 
@@ -112,6 +135,30 @@ public class NState {
             }
         });
 
+    }
+
+    private void addTransition(){
+
+        arrow.setFill(Color.RED);
+
+            double startX = this.circle.getCenterX()+50;
+            double startY=circle.getCenterY();
+            arrow.getPoints().addAll(
+                    startX, startY - 20,
+                    startX + 10, startY - 10,
+                    startX, startY
+
+            );
+
+
+        this.circle.setOnMouseClicked(e->{
+            if(e.getButton() == MouseButton.SECONDARY){
+                sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
+                e.consume();
+            }
+        });
+
+        //this.line.setStroke(Color.RED);
     }
 
 
@@ -142,5 +189,35 @@ public class NState {
     public void setStateName(String stateName) {
         this.stateName.setText(stateName);
     }
+
+    public Line getLine() {
+        return line;
+    }
+    private void onArrowDragged() {
+
+
+
+        arrow.setOnMouseDragged(event-> {
+            arrow.getPoints().setAll(
+                    event.getX(), event.getY() - 20,
+                    event.getX() + 10, event.getY() - 10,
+                    event.getX(), event.getY()
+            );
+            line.setFill(Color.RED);
+            line.setStartX(this.circle.getCenterX()+50);
+            line.setStartY(circle.getCenterY());
+            line.setEndX(event.getX());
+            line.setEndY(event.getY()-10);
+
+
+
+        });
+
+    }
+
+    public Polygon getArrow() {
+        return arrow;
+    }
+
 }
 

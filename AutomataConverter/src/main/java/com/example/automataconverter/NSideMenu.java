@@ -9,6 +9,8 @@ public class NSideMenu {
     private Label fLabel ;
     private Label rLabel ;
     private Label nLabel ;
+
+    private Label tLabel;
     private ContextMenu menu;
     NSideMenu(){
         this.menu = new ContextMenu();
@@ -20,9 +22,11 @@ public class NSideMenu {
         fLabel = new Label("Final");
         rLabel = new Label("Remove");
         nLabel = new Label("Normal");
+        tLabel = new Label("Transition");
         menu.getItems().add(new CustomMenuItem(fLabel));
         menu.getItems().add(new CustomMenuItem(nLabel));
         menu.getItems().add(new CustomMenuItem(rLabel));
+        menu.getItems().add(new CustomMenuItem(tLabel));
     }
 
     public Label getfLabel() {
@@ -39,5 +43,9 @@ public class NSideMenu {
 
     public Label getnLabel() {
         return nLabel;
+    }
+
+    public Label gettLabel() {
+        return tLabel;
     }
 }

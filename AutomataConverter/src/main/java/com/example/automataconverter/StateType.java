@@ -4,5 +4,6 @@ public enum StateType {
 
         Normal,
         Final,
-        Start
+        Start,
+
 }
