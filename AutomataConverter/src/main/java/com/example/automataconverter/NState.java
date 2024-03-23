@@ -19,7 +19,8 @@ public class NState {
     private NSideMenu sideMenu;
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
-
+    private Polygon arrow;
+    private Line line;
 
     public NState(double radius,StateType stateType) {
 

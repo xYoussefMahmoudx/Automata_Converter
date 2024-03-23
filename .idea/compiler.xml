@@ -9,8 +9,5 @@
         <module name="Automata_Converter" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Automata_Converter" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

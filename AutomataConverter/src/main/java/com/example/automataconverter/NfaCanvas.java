@@ -65,7 +65,7 @@ public class NfaCanvas {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
             }
@@ -82,7 +82,7 @@ public class NfaCanvas {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
             }
@@ -98,7 +98,7 @@ public class NfaCanvas {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
             }
