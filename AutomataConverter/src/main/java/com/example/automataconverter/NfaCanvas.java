@@ -64,10 +64,19 @@ public class NfaCanvas {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+
+
                 Nodes.add(s);
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setTransitionCallBack(()-> {
+                    try {
+                        showTransitionScreen();
+                    } catch (IOException x) {
+                        throw new RuntimeException(x);
+                    }
+                });
             }
         });
     }
@@ -85,6 +94,13 @@ public class NfaCanvas {
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setTransitionCallBack(()-> {
+                    try {
+                        showTransitionScreen();
+                    } catch (IOException x) {
+                        throw new RuntimeException(x);
+                    }
+                });
             }
         });
     }
@@ -101,6 +117,13 @@ public class NfaCanvas {
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setTransitionCallBack(()-> {
+                    try {
+                        showTransitionScreen();
+                    } catch (IOException x) {
+                        throw new RuntimeException(x);
+                    }
+                });
             }
         });
     }
@@ -124,6 +147,20 @@ public class NfaCanvas {
     }
     public  ArrayList returnArrayFunction() {
         return Nodes;
+    }
+
+    public void showTransitionScreen() throws IOException{
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getClassLoader().getResource(
+                        "transitionNameInput.fxml"));
+        root = loader.load();
+        stateNameInputController c = loader.getController();
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
     }
 
 }
