@@ -5,11 +5,11 @@ import callbackinterfaces.RemoveNode;
 import callbackinterfaces.RemoveNodeFromArray;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Line;
+
+import java.util.ArrayList;
 
 
 public class NState {
@@ -21,8 +21,7 @@ public class NState {
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
     private AddTransition TransitionCallBack;
-    private Polygon arrow;
-    private Line line;
+    ArrayList<STransition> STransitions = new ArrayList<STransition>();
 
     public NState(double radius,StateType stateType) {
 
@@ -36,9 +35,11 @@ public class NState {
         stateName.toBack();
         innerCircle.centerXProperty().bind(circle.centerXProperty());
         innerCircle.centerYProperty().bind(circle.centerYProperty());
-        arrow=new Polygon();
 
-        this.line = new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20);
+        for(STransition transition : STransitions) {
+            transition.setLine(new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20));
+        }
+
         createNode();
         onNormalClicked();
         onFinalClicked();
@@ -144,17 +145,17 @@ public class NState {
     }
 
     private void addTransition(){
-
-        arrow.setFill(Color.RED);
+        STransition transition =new STransition();
 
             double startX = this.circle.getCenterX()+50;
             double startY=circle.getCenterY();
-            arrow.getPoints().addAll(
+            transition.getArrow().getPoints().addAll(
                     startX, startY - 20,
                     startX + 10, startY - 10,
                     startX, startY
 
             );
+        STransitions.add(transition);
 
 
         this.circle.setOnMouseClicked(e->{
@@ -196,34 +197,32 @@ public class NState {
         this.stateName.setText(stateName);
     }
 
-    public Line getLine() {
-        return line;
-    }
     private void onArrowDragged() {
 
 
-
-        arrow.setOnMouseDragged(event-> {
-            arrow.getPoints().setAll(
-                    event.getX(), event.getY() - 20,
-                    event.getX() + 10, event.getY() - 10,
-                    event.getX(), event.getY()
-            );
-            line.setFill(Color.RED);
-            line.setStartX(this.circle.getCenterX()+50);
-            line.setStartY(circle.getCenterY());
-            line.setEndX(event.getX());
-            line.setEndY(event.getY()-10);
+        for(STransition transition : STransitions) {
+            transition.getArrow().setOnMouseDragged(event -> {
+                transition.getArrow().getPoints().setAll(
+                        event.getX(), event.getY() - 20,
+                        event.getX() + 10, event.getY() - 10,
+                        event.getX(), event.getY()
+                );
 
 
+                transition.getLine().setFill(Color.RED);
+                transition.getLine().setStartX(this.circle.getCenterX() + 50);
+                transition.getLine().setStartY(circle.getCenterY());
+                transition.getLine().setEndX(event.getX());
+                transition.getLine().setEndY(event.getY() - 10);
 
-        });
 
+            });
+        }
     }
 
-    public Polygon getArrow() {
-        return arrow;
-    }
 
+    public ArrayList<STransition> getTransitionSTransitions() {
+        return STransitions;
+    }
 }
 

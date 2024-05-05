@@ -67,7 +67,14 @@ public class NfaCanvas {
 
 
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                for(STransition transition : s.getTransitionSTransitions()) {
+                    mainCanvas.getChildren().add(transition.getArrow());
+                    mainCanvas.getChildren().add(transition.getLine());
+                }
+                s.setAnchorCallBack(()->returnAnchorFunction());
+                s.setArrayCallBack(()->returnArrayFunction());
+
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setTransitionCallBack(()-> {
@@ -91,7 +98,11 @@ public class NfaCanvas {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                for(STransition transition : s.getTransitionSTransitions()) {
+                    mainCanvas.getChildren().add(transition.getArrow());
+                    mainCanvas.getChildren().add(transition.getLine());
+                }
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setTransitionCallBack(()-> {
@@ -114,7 +125,11 @@ public class NfaCanvas {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
-                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
+                mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+                for(STransition transition : s.getTransitionSTransitions()) {
+                    mainCanvas.getChildren().add(transition.getArrow());
+                    mainCanvas.getChildren().add(transition.getLine());
+                }
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setTransitionCallBack(()-> {
