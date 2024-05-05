@@ -34,6 +34,7 @@ public class HelloController {
         test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
         s.setAnchorCallBack(()->returnAnchorFunction());
         s.setArrayCallBack(()->returnArrayFunction());
+
     }
 
     public void showStateNameScreen(NState state) throws IOException{
@@ -51,13 +52,15 @@ public class HelloController {
     }
 
 
-
     public  AnchorPane returnAnchorFunction() {
        return test;
     }
     public  ArrayList returnArrayFunction() {
         return Nodes;
     }
+
+
+
 
 
 }

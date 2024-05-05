@@ -1,5 +1,6 @@
 package com.example.automataconverter;
 
+import callbackinterfaces.AddTransition;
 import callbackinterfaces.RemoveNode;
 import callbackinterfaces.RemoveNodeFromArray;
 import javafx.scene.control.Label;
@@ -19,6 +20,7 @@ public class NState {
     private NSideMenu sideMenu;
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
+    private AddTransition TransitionCallBack;
     private Polygon arrow;
     private Line line;
 
@@ -61,6 +63,9 @@ public class NState {
         //this.stateType = StateType.Normal;
     }
 
+    public void setTransitionCallBack(AddTransition callBack){
+        this.TransitionCallBack=callBack;
+    }
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -115,7 +120,7 @@ public class NState {
         sideMenu.gettLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
 
-
+                TransitionCallBack.apply();
                 addTransition();
             }
         });
