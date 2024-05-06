@@ -1,28 +1,30 @@
 package nfatodfa;
 
-public class Transition{
-    private String symbol;
+public class Transition {
+    private char alphabet;
     private State nextState;
 
-    public Transition(String symbol, State nextState) {
-        this.symbol = symbol;
+    public Transition(char alphabet, State nextState) {
+        this.alphabet = alphabet;
         this.nextState = nextState;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public char getAlphabet() {
+        return alphabet;
     }
 
     public State getNextState() {
         return nextState;
     }
 
-    public void setNextState(State nextState){
+    public void setNextState(State nextState) {
         this.nextState = nextState;
     }
 
     @Override
     public String toString() {
-        return "(" + symbol + " -> " + nextState + ")";
+        if (alphabet == 'e')
+            return "ε" + " -> " + nextState;
+        return alphabet + " -> " + nextState;
     }
 }
