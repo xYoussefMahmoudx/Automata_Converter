@@ -2,24 +2,30 @@ package com.example.automataconverter;
 
 import callbackinterfaces.AddTransition;
 import callbackinterfaces.GetSourceNode;
-import callbackinterfaces.SetStateName;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 
-import java.util.ArrayList;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class transitionNameInputController {
+
+
+public class transitionNameInputController   {
 
     @FXML
-    private ComboBox<String> dropDownMenu;
+    private ComboBox dropDownMenu;
 
     @FXML
     private CheckBox epsilonCheck;
@@ -42,17 +48,40 @@ public class transitionNameInputController {
 
     @FXML
     void submit(ActionEvent event) {
-        sourceNode.apply().setTransitionCallBack(()->returnLiteral());
-        sourceNode.apply().updateTransitionLabel();
-        if(returnLiteral().isBlank()){
-            errorLabel.setText("please enter a transition literal");
-        }else{
-            stage.hide();
+        try {
+            if(!(dropDownMenu.getSelectionModel().getSelectedItem().equals(null))&&returnLiteral().isBlank()){
+                errorLabel.setText("please enter a transition literal");
+            }else if((dropDownMenu.getSelectionModel().equals(null))&&!(returnLiteral().isBlank())){
+                System.out.println("if 2");
+                errorLabel.setText("please select a destination State");
+
+            }else if((dropDownMenu.getSelectionModel().equals(null))||(returnLiteral().isBlank())){
+                errorLabel.setText("please select a destination State and enter a transition literal");
+            }else{
+                sourceNode.apply().setTransitionCallBack(()->returnLiteral());
+                sourceNode.apply().updateTransitionLabel();
+                String sName;
+                for(NState state: sourceNode.apply().getArrayCallBack().apply()){
+                    if(!dropDownMenu.getSelectionModel().getSelectedItem().equals(null)){
+                        sName=dropDownMenu.getSelectionModel().getSelectedItem().toString();
+                        if(state.getStateName().getText()==sName){
+                            sourceNode.apply().setGetDestinationState(()->{return state;});
+                            sourceNode.apply().updateDestination();
+                        }
+                    }
+
+                }
+                stage.hide();
+            }
+        }catch (NullPointerException ex){
+            errorLabel.setText("please select a destination State");
         }
+
 
 
     }
     String returnLiteral(){return transitionLiteral.getText();}
+
 
 
 
@@ -66,4 +95,11 @@ public class transitionNameInputController {
     public void setStage(Stage stage){
         this.stage=stage;
     }
+
+
+    public ComboBox getDropDownMenu() {
+        return dropDownMenu;
+    }
 }
+
+
