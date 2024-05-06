@@ -200,6 +200,9 @@ public class NState {
     }
 
 
+    public RemoveNodeFromArray getArrayCallBack() {
+        return arrayCallBack;
+    }
 
     public void deleteNode(){
         arrayCallBack.apply().remove(this);

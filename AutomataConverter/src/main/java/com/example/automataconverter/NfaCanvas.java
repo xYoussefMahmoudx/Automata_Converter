@@ -1,14 +1,13 @@
 package com.example.automataconverter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.CustomMenuItem;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -176,7 +175,17 @@ public class NfaCanvas {
         stage.show();
         c.setGetSourceNode(()->{return state;});
         c.setStage(stage);
+        dataComboBox(c.getDropDownMenu());
 
+
+    }
+
+    public void dataComboBox(ComboBox dropDownMenu) {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        for(NState state: Nodes){
+            data.add(state.getStateName().getText());
+        }
+        dropDownMenu.setItems(data);
     }
 
 }

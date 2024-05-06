@@ -2,24 +2,30 @@ package com.example.automataconverter;
 
 import callbackinterfaces.AddTransition;
 import callbackinterfaces.GetSourceNode;
-import callbackinterfaces.SetStateName;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 
-import java.util.ArrayList;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class transitionNameInputController {
+
+
+public class transitionNameInputController   {
 
     @FXML
-    private ComboBox<String> dropDownMenu;
+    private ComboBox dropDownMenu;
 
     @FXML
     private CheckBox epsilonCheck;
@@ -66,4 +72,11 @@ public class transitionNameInputController {
     public void setStage(Stage stage){
         this.stage=stage;
     }
+
+
+    public ComboBox getDropDownMenu() {
+        return dropDownMenu;
+    }
 }
+
+
