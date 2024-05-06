@@ -12,13 +12,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.control.ComboBox;
 
 import java.util.ArrayList;
 
 public class transitionNameInputController {
 
     @FXML
-    private TextField destinationState;
+    private ComboBox<String> dropDownMenu;
 
     @FXML
     private CheckBox epsilonCheck;

@@ -218,7 +218,8 @@ public class NState {
         System.out.println("i am here before  draged thing"+this.STransitions.size());
 
         for(STransition transition : this.STransitions) {
-            System.out.println("i am here in draged thing");
+            System.out.println(transition.getTliteral().getText());
+
 
             transition.getArrow().setOnMouseDragged(event -> {
                 transition.getArrow().getPoints().setAll(
@@ -233,10 +234,11 @@ public class NState {
                 transition.getLine().setStartY(circle.getCenterY());
                 transition.getLine().setEndX(event.getX());
                 transition.getLine().setEndY(event.getY() - 10);
-                transition.getTliteral().layoutXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2));
-                // Bind label's layout Y to the midpoint of the line's start and end Y
-                transition.getTliteral().layoutYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2));
-
+               // transition.getTliteral().layoutXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2));
+               // transition.getTliteral().layoutYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2));
+                transition.getTliteral().translateXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2).subtract(transition.getTliteral().widthProperty().divide(2)));
+                // Bind label's translate Y to the midpoint of the line's start and end Y minus an offset
+                transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
             });
         }
     }
