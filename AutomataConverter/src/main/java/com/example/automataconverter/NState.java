@@ -3,6 +3,7 @@ package com.example.automataconverter;
 import callbackinterfaces.AddTransition;
 import callbackinterfaces.RemoveNode;
 import callbackinterfaces.RemoveNodeFromArray;
+import callbackinterfaces.UpdateTransition;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -21,6 +22,7 @@ public class NState {
     private RemoveNode anchorPaneCallBack;
     private RemoveNodeFromArray arrayCallBack;
     private AddTransition TransitionCallBack;
+    private UpdateTransition updateTransition;
     ArrayList<STransition> STransitions = new ArrayList<STransition>();
 
     public NState(double radius,StateType stateType) {
@@ -46,7 +48,7 @@ public class NState {
         onNodeDragged();
         onRemoveClicked();
         onTransitionClicked();
-        onArrowDragged();
+
         if(stateType.equals(StateType.Final)){
             makeFinal();
         }
@@ -57,6 +59,11 @@ public class NState {
     public void setArrayCallBack(RemoveNodeFromArray callBack){
         this.arrayCallBack=callBack;
     }
+
+    public void setUpdateTransition(UpdateTransition updateTransition) {
+        this.updateTransition = updateTransition;
+    }
+
     private void createNode(){
         circle.setFill(Color.WHITE);
         circle.setStroke(Color.BLACK);
@@ -123,6 +130,8 @@ public class NState {
 
                 TransitionCallBack.apply();
                 addTransition();
+                onArrowDragged();
+
             }
         });
 
@@ -145,7 +154,9 @@ public class NState {
     }
 
     private void addTransition(){
+        System.out.println(this.STransitions.size());
         STransition transition =new STransition();
+        transition.setLine(new Line(this.circle.getCenterX()+ this.circle.getRadius(), this.circle.getCenterY() , this.circle.getCenterX()+this.circle.getRadius() + 20, this.circle.getCenterY() ));
 
             double startX = this.circle.getCenterX()+50;
             double startY=circle.getCenterY();
@@ -155,7 +166,11 @@ public class NState {
                     startX, startY
 
             );
-        STransitions.add(transition);
+
+        updateTransition.apply().getChildren().add(transition.getArrow());
+        updateTransition.apply().getChildren().add(transition.getLine());
+
+        this.STransitions.add(transition);
 
 
         this.circle.setOnMouseClicked(e->{
@@ -198,9 +213,10 @@ public class NState {
     }
 
     private void onArrowDragged() {
+        System.out.println("i am here before  draged thing"+this.STransitions.size());
 
-
-        for(STransition transition : STransitions) {
+        for(STransition transition : this.STransitions) {
+            System.out.println("i am here in draged thing");
             transition.getArrow().setOnMouseDragged(event -> {
                 transition.getArrow().getPoints().setAll(
                         event.getX(), event.getY() - 20,

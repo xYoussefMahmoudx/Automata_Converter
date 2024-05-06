@@ -56,6 +56,7 @@ public class NfaCanvas {
     }
 
     private void onFinalClicked(){
+        System.out.println("i am in final");
         fLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 NState s = new NState(50,StateType.Final);
@@ -68,15 +69,12 @@ public class NfaCanvas {
 
                 Nodes.add(s);
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
-                for(STransition transition : s.getTransitionSTransitions()) {
-                    mainCanvas.getChildren().add(transition.getArrow());
-                    mainCanvas.getChildren().add(transition.getLine());
-                }
-                s.setAnchorCallBack(()->returnAnchorFunction());
-                s.setArrayCallBack(()->returnArrayFunction());
 
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setAnchorCallBack(()->returnAnchorFunction());
+                s.setArrayCallBack(()->returnArrayFunction());
+                s.setUpdateTransition(()->returnAnchorFunction());
                 s.setTransitionCallBack(()-> {
                     try {
                         showTransitionScreen();
@@ -89,6 +87,7 @@ public class NfaCanvas {
     }
 
     private void onNormalClicked(){
+        System.out.println("i am in normal");
         nLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 NState s = new NState(50,StateType.Normal);
@@ -99,12 +98,9 @@ public class NfaCanvas {
                 }
                 Nodes.add(s);
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
-                for(STransition transition : s.getTransitionSTransitions()) {
-                    mainCanvas.getChildren().add(transition.getArrow());
-                    mainCanvas.getChildren().add(transition.getLine());
-                }
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setUpdateTransition(()->returnAnchorFunction());
                 s.setTransitionCallBack(()-> {
                     try {
                         showTransitionScreen();
@@ -126,12 +122,9 @@ public class NfaCanvas {
                 }
                 Nodes.add(s);
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
-                for(STransition transition : s.getTransitionSTransitions()) {
-                    mainCanvas.getChildren().add(transition.getArrow());
-                    mainCanvas.getChildren().add(transition.getLine());
-                }
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
+                s.setUpdateTransition(()->returnAnchorFunction());
                 s.setTransitionCallBack(()-> {
                     try {
                         showTransitionScreen();
