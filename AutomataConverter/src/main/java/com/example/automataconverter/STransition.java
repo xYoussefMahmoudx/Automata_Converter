@@ -9,6 +9,7 @@ public class STransition {
     private Polygon arrow = new Polygon();
     private Line line;
     private Label tliteral;
+    private NState destinationState;
 
     public STransition(){
         this.arrow= new Polygon();
@@ -37,5 +38,13 @@ public class STransition {
 
     public Label getTliteral() {
         return tliteral;
+    }
+
+    public void setDestinationState(NState destinationState) {
+        this.destinationState = destinationState;
+    }
+
+    public NState getDestinationState() {
+        return destinationState;
     }
 }

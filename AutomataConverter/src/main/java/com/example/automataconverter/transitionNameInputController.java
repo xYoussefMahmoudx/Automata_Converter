@@ -48,17 +48,40 @@ public class transitionNameInputController   {
 
     @FXML
     void submit(ActionEvent event) {
-        sourceNode.apply().setTransitionCallBack(()->returnLiteral());
-        sourceNode.apply().updateTransitionLabel();
-        if(returnLiteral().isBlank()){
-            errorLabel.setText("please enter a transition literal");
-        }else{
-            stage.hide();
+        try {
+            if(!(dropDownMenu.getSelectionModel().getSelectedItem().equals(null))&&returnLiteral().isBlank()){
+                errorLabel.setText("please enter a transition literal");
+            }else if((dropDownMenu.getSelectionModel().equals(null))&&!(returnLiteral().isBlank())){
+                System.out.println("if 2");
+                errorLabel.setText("please select a destination State");
+
+            }else if((dropDownMenu.getSelectionModel().equals(null))||(returnLiteral().isBlank())){
+                errorLabel.setText("please select a destination State and enter a transition literal");
+            }else{
+                sourceNode.apply().setTransitionCallBack(()->returnLiteral());
+                sourceNode.apply().updateTransitionLabel();
+                String sName;
+                for(NState state: sourceNode.apply().getArrayCallBack().apply()){
+                    if(!dropDownMenu.getSelectionModel().getSelectedItem().equals(null)){
+                        sName=dropDownMenu.getSelectionModel().getSelectedItem().toString();
+                        if(state.getStateName().getText()==sName){
+                            sourceNode.apply().setGetDestinationState(()->{return state;});
+                            sourceNode.apply().updateDestination();
+                        }
+                    }
+
+                }
+                stage.hide();
+            }
+        }catch (NullPointerException ex){
+            errorLabel.setText("please select a destination State");
         }
+
 
 
     }
     String returnLiteral(){return transitionLiteral.getText();}
+
 
 
 

@@ -21,6 +21,7 @@ public class NState {
     private AddTransition TransitionCallBack;
     private UpdateTransition updateTransition;
     private ShowTransitionScreen showTransitionScreen;
+    private GetDestinationState getDestinationState;
     ArrayList<STransition> STransitions = new ArrayList<STransition>();
     STransition currentTransition;
 
@@ -74,6 +75,9 @@ public class NState {
 
     public void setTransitionCallBack(AddTransition callBack){
         this.TransitionCallBack=callBack;
+    }
+    public void setGetDestinationState(GetDestinationState callBack){
+        this.getDestinationState=callBack;
     }
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
@@ -255,6 +259,13 @@ public class NState {
         currentTransition.setTiteral(this.TransitionCallBack.apply());
     }
 
-
+    public void updateDestination(){
+        currentTransition.setDestinationState(this.getDestinationState.apply());
+    }
+    public void printDest(){
+        for(STransition transition : this.STransitions) {
+            System.out.println(transition.getDestinationState().getStateName().getText());
+        }
+    }
 }
 
