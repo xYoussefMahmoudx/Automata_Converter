@@ -1,9 +1,6 @@
 package com.example.automataconverter;
 
-import callbackinterfaces.AddTransition;
-import callbackinterfaces.RemoveNode;
-import callbackinterfaces.RemoveNodeFromArray;
-import callbackinterfaces.UpdateTransition;
+import callbackinterfaces.*;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -23,7 +20,10 @@ public class NState {
     private RemoveNodeFromArray arrayCallBack;
     private AddTransition TransitionCallBack;
     private UpdateTransition updateTransition;
+    private ShowTransitionScreen showTransitionScreen;
     ArrayList<STransition> STransitions = new ArrayList<STransition>();
+    STransition currentTransition;
+
 
     public NState(double radius,StateType stateType) {
 
@@ -63,6 +63,7 @@ public class NState {
     public void setUpdateTransition(UpdateTransition updateTransition) {
         this.updateTransition = updateTransition;
     }
+    public void setShowTransitionScreen(ShowTransitionScreen showTransitionScreen) {this.showTransitionScreen = showTransitionScreen;}
 
     private void createNode(){
         circle.setFill(Color.WHITE);
@@ -127,8 +128,7 @@ public class NState {
     private void onTransitionClicked(){
         sideMenu.gettLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-
-                TransitionCallBack.apply();
+                showTransitionScreen.apply();
                 addTransition();
                 onArrowDragged();
 
@@ -155,6 +155,7 @@ public class NState {
 
     private void addTransition(){
         System.out.println(this.STransitions.size());
+
         STransition transition =new STransition();
         transition.setLine(new Line(this.circle.getCenterX()+ this.circle.getRadius(), this.circle.getCenterY() , this.circle.getCenterX()+this.circle.getRadius() + 20, this.circle.getCenterY() ));
 
@@ -169,7 +170,8 @@ public class NState {
 
         updateTransition.apply().getChildren().add(transition.getArrow());
         updateTransition.apply().getChildren().add(transition.getLine());
-
+        updateTransition.apply().getChildren().add(transition.getTliteral());
+        currentTransition=transition;
         this.STransitions.add(transition);
 
 
@@ -217,6 +219,7 @@ public class NState {
 
         for(STransition transition : this.STransitions) {
             System.out.println("i am here in draged thing");
+
             transition.getArrow().setOnMouseDragged(event -> {
                 transition.getArrow().getPoints().setAll(
                         event.getX(), event.getY() - 20,
@@ -240,5 +243,11 @@ public class NState {
     public ArrayList<STransition> getTransitionSTransitions() {
         return STransitions;
     }
+
+    public void updateTransitionLabel(){
+        currentTransition.setTiteral(this.TransitionCallBack.apply());
+    }
+
+
 }
 
