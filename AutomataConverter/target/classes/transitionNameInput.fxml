@@ -17,6 +17,6 @@
       <Label alignment="CENTER" layoutX="64.0" layoutY="144.0" prefHeight="35.0" prefWidth="199.0" text="Enter Transition Input :" textAlignment="CENTER" />
       <CheckBox fx:id="epsilonCheck" layoutX="462.0" layoutY="153.0" mnemonicParsing="false" text="Epsilon" />
       <Label fx:id="errorLabel" layoutX="175.0" layoutY="41.0" prefHeight="18.0" prefWidth="256.0" />
-      <ComboBox fx:id="dropDownMenu" layoutX="308.0" layoutY="85.0" onAction="#comboBoxSubmit" prefHeight="26.0" prefWidth="210.0" />
+      <ComboBox fx:id="dropDownMenu" layoutX="308.0" layoutY="85.0" prefHeight="26.0" prefWidth="210.0" />
    </children>
 </AnchorPane>
