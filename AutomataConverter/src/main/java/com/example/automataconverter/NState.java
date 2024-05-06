@@ -233,7 +233,9 @@ public class NState {
                 transition.getLine().setStartY(circle.getCenterY());
                 transition.getLine().setEndX(event.getX());
                 transition.getLine().setEndY(event.getY() - 10);
-
+                transition.getTliteral().layoutXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2));
+                // Bind label's layout Y to the midpoint of the line's start and end Y
+                transition.getTliteral().layoutYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2));
 
             });
         }
