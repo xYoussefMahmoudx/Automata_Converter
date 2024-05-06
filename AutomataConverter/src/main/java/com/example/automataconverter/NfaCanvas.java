@@ -39,6 +39,7 @@ public class NfaCanvas {
     private Scene scene;
 
 
+
     @FXML
     void convertToDFA(ActionEvent event) {
 
@@ -75,13 +76,15 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-                s.setTransitionCallBack(()-> {
+
+                s.setShowTransitionScreen(()-> {
                     try {
-                        showTransitionScreen();
-                    } catch (IOException x) {
-                        throw new RuntimeException(x);
+                        showTransitionScreen(s);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
                 });
+
             }
         });
     }
@@ -101,13 +104,15 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-                s.setTransitionCallBack(()-> {
+
+                s.setShowTransitionScreen(()-> {
                     try {
-                        showTransitionScreen();
-                    } catch (IOException x) {
-                        throw new RuntimeException(x);
+                        showTransitionScreen(s);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
                 });
+
             }
         });
     }
@@ -125,11 +130,12 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-                s.setTransitionCallBack(()-> {
+
+                s.setShowTransitionScreen(()-> {
                     try {
-                        showTransitionScreen();
-                    } catch (IOException x) {
-                        throw new RuntimeException(x);
+                        showTransitionScreen(s);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
                 });
             }
@@ -157,18 +163,21 @@ public class NfaCanvas {
         return Nodes;
     }
 
-    public void showTransitionScreen() throws IOException{
+    public void showTransitionScreen(NState state) throws IOException{
         FXMLLoader loader = new FXMLLoader(
                 getClass().getClassLoader().getResource(
                         "transitionNameInput.fxml"));
         root = loader.load();
-        stateNameInputController c = loader.getController();
+        transitionNameInputController c = loader.getController();
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        c.setGetSourceNode(()->{return state;});
+        c.setStage(stage);
 
     }
 
 }
+

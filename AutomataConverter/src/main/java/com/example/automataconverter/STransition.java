@@ -1,4 +1,5 @@
 package com.example.automataconverter;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
@@ -7,10 +8,12 @@ import javafx.scene.shape.Polygon;
 public class STransition {
     private Polygon arrow = new Polygon();
     private Line line;
+    private Label tliteral;
 
     public STransition(){
         this.arrow= new Polygon();
         this.arrow.setFill(Color.RED);
+        this.tliteral=new Label();
 
     }
 
@@ -26,5 +29,13 @@ public class STransition {
 
     public Polygon getArrow() {
         return arrow;
+    }
+
+    public void setTiteral(String literal){
+        tliteral.setText(literal);
+    }
+
+    public Label getTliteral() {
+        return tliteral;
     }
 }
