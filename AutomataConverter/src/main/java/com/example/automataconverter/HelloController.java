@@ -25,13 +25,23 @@ public class HelloController {
     private Scene scene;
 
 
+
+
     int counter = 0;
     @FXML
     public void spawn() throws IOException {
         NState s = new NState(50,StateType.Normal);
+        System.out.println("i am hbefore ");
         showStateNameScreen(s);
         Nodes.add(s);
-        test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName(),s.getArrow(),s.getLine());
+        test.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
+        System.out.println("i am hbefore ");
+        for(STransition transition : s.getTransitionSTransitions()) {
+
+            System.out.println("i am here ");
+            test.getChildren().add(transition.getArrow());
+            test.getChildren().add(transition.getLine());
+        }
         s.setAnchorCallBack(()->returnAnchorFunction());
         s.setArrayCallBack(()->returnArrayFunction());
 
