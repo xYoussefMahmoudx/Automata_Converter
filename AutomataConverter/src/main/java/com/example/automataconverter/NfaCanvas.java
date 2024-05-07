@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -101,13 +102,19 @@ public class NfaCanvas {
     private void onStartClicked()  {
         sLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Normal);
+                NState s = new NState(50,StateType.Start);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
                 Nodes.add(s);
+                for (NState state:Nodes) {
+                    if (state.getStateType().equals(StateType.Start) && !state.equals(s)) {
+                        state.makeNormal();
+                    }
+                }
+
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
