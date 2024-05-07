@@ -21,29 +21,24 @@ public class NfaCanvas {
 
     @FXML
     private Button convertToDFABtn;
-
     @FXML
     private AnchorPane mainCanvas;
-
     private Label sLabel =new Label("start") ;
     private Label fLabel =new Label("Final");
     private Label nLabel = new Label("Normal");
     private ContextMenu menu=new ContextMenu(new CustomMenuItem(sLabel),
-            new CustomMenuItem(fLabel),
-            new CustomMenuItem(nLabel));
-
+                                            new CustomMenuItem(fLabel),
+                                            new CustomMenuItem(nLabel));
     private ArrayList<NState> Nodes = new ArrayList<>();
     private Parent root;
     private Stage stage;
     private Scene scene;
-
-
-
+//Convert to DFA Button
     @FXML
     void convertToDFA(ActionEvent event) {
 
     }
-
+// onAction Event Functions
     @FXML
     void onRightClicked(MouseEvent event) {
         if(event.getButton() == MouseButton.SECONDARY){
@@ -52,11 +47,8 @@ public class NfaCanvas {
             onStartClicked();
             onNormalClicked();
         }
-
     }
-
     private void onFinalClicked(){
-        System.out.println("i am in final");
         fLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 NState s = new NState(50,StateType.Final);
@@ -65,17 +57,13 @@ public class NfaCanvas {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
-
                 Nodes.add(s);
                 mainCanvas.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
-
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-
                 s.setShowTransitionScreen(()-> {
                     try {
                         showTransitionScreen(s);
@@ -83,13 +71,10 @@ public class NfaCanvas {
                         ex.printStackTrace();
                     }
                 });
-
             }
         });
     }
-
     private void onNormalClicked(){
-        System.out.println("i am in normal");
         nLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 NState s = new NState(50,StateType.Normal);
@@ -103,7 +88,6 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-
                 s.setShowTransitionScreen(()-> {
                     try {
                         showTransitionScreen(s);
@@ -111,7 +95,6 @@ public class NfaCanvas {
                         ex.printStackTrace();
                     }
                 });
-
             }
         });
     }
@@ -140,6 +123,7 @@ public class NfaCanvas {
             }
         });
     }
+    //show External Screens Functions
     public void showStateNameScreen(NState state) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getClassLoader().getResource(
@@ -147,21 +131,13 @@ public class NfaCanvas {
         root = loader.load();
         stateNameInputController c = loader.getController();
         stage = new Stage();
+        stage.setTitle("Enter state Name");
         stage.initModality(Modality.APPLICATION_MODAL);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
         c.setNameCallback((String name)->{state.setStateName(name);stage.hide();});
     }
-
-
-    public  AnchorPane returnAnchorFunction() {
-        return mainCanvas;
-    }
-    public  ArrayList returnArrayFunction() {
-        return Nodes;
-    }
-
     public void showTransitionScreen(NState state) throws IOException{
         FXMLLoader loader = new FXMLLoader(
                 getClass().getClassLoader().getResource(
@@ -169,6 +145,7 @@ public class NfaCanvas {
         root = loader.load();
         transitionNameInputController c = loader.getController();
         stage = new Stage();
+        stage.setTitle("Enter Transition");
         stage.initModality(Modality.APPLICATION_MODAL);
         scene = new Scene(root);
         stage.setScene(scene);
@@ -176,17 +153,24 @@ public class NfaCanvas {
         c.setGetSourceNode(()->{return state;});
         c.setStage(stage);
         dataComboBox(c.getDropDownMenu());
-
-
     }
-
-    public void dataComboBox(ComboBox dropDownMenu) {
+    //Function used in External Screen
+    private void dataComboBox(ComboBox dropDownMenu) {
         ObservableList<String> data = FXCollections.observableArrayList();
         for(NState state: Nodes){
             data.add(state.getStateName().getText());
         }
         dropDownMenu.setItems(data);
     }
+    //return Functions for CallBacks
+    public  AnchorPane returnAnchorFunction() {
+    return mainCanvas;
+}
+    public  ArrayList returnArrayFunction() {
+        return Nodes;
+    }
+
+
 
 }
 

@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("nfa-canvas.fxml"));
         Scene scene = new Scene(root, 885, 666);
-        stage.setTitle("Hello!");
+        stage.setTitle("NFA Canvas");
         stage.setScene(scene);
         stage.show();
     }
