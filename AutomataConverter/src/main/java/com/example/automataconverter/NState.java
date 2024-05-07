@@ -192,25 +192,25 @@ public class NState {
                 transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
 
 
-                currentTransition.getLine().setStartX(this.circle.getCenterX()+ this.circle.getRadius());
-                currentTransition.getLine().setStartY(this.circle.getCenterY());
-                currentTransition.getLine().setEndX(currentTransition.getDestinationState().circle.getCenterX()-50);
-                currentTransition.getLine().setEndY(currentTransition.getDestinationState().circle.getCenterY());
+                transition.getLine().setStartX(this.circle.getCenterX()+ this.circle.getRadius());
+                transition.getLine().setStartY(this.circle.getCenterY());
+                transition.getLine().setEndX(transition.getDestinationState().circle.getCenterX()-50);
+                transition.getLine().setEndY(transition.getDestinationState().circle.getCenterY());
 
-                double startX = currentTransition.getLine().getEndX();
-                double startY=currentTransition.getLine().getEndY();
+                double startX = transition.getLine().getEndX();
+                double startY=transition.getLine().getEndY();
                 double arrowMidX = startX;
                 double arrowMidY = startY - 9;
 
-                currentTransition.getArrow().getPoints().setAll(
+                transition.getArrow().getPoints().setAll(
                         startX, startY - 20,
                         startX + 10, startY - 10,
                         startX, startY
 
                 );
 
-                currentTransition.getLine().setEndX(arrowMidX);
-                currentTransition.getLine().setEndY(arrowMidY);
+                transition.getLine().setEndX(arrowMidX);
+                transition.getLine().setEndY(arrowMidY);
 
             });
         }
