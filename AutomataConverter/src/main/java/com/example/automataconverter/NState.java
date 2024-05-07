@@ -1,6 +1,7 @@
 package com.example.automataconverter;
 
 import callbackinterfaces.*;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -21,6 +22,7 @@ public class NState {
     private AddTransition TransitionCallBack;
     private UpdateTransition updateTransition;
     private ShowTransitionScreen showTransitionScreen;
+    private GetDestinationState getDestinationState;
     ArrayList<STransition> STransitions = new ArrayList<STransition>();
     STransition currentTransition;
 
@@ -75,6 +77,9 @@ public class NState {
     public void setTransitionCallBack(AddTransition callBack){
         this.TransitionCallBack=callBack;
     }
+    public void setGetDestinationState(GetDestinationState callBack){
+        this.getDestinationState=callBack;
+    }
     private void onFinalClicked(){
         sideMenu.getfLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -107,6 +112,7 @@ public class NState {
                 sideMenu.getMenu().show(this.circle,e.getScreenX(),e.getScreenY());
                 e.consume();
             }
+
         });
 
 
@@ -161,16 +167,24 @@ public class NState {
 
             double startX = this.circle.getCenterX()+50;
             double startY=circle.getCenterY();
-            transition.getArrow().getPoints().addAll(
+
+
+
+        transition.getArrow().getPoints().addAll(
                     startX, startY - 20,
                     startX + 10, startY - 10,
                     startX, startY
 
             );
 
+
+
+
         updateTransition.apply().getChildren().add(transition.getArrow());
         updateTransition.apply().getChildren().add(transition.getLine());
         updateTransition.apply().getChildren().add(transition.getTliteral());
+
+
         currentTransition=transition;
         this.STransitions.add(transition);
 
@@ -200,6 +214,9 @@ public class NState {
     }
 
 
+    public RemoveNodeFromArray getArrayCallBack() {
+        return arrayCallBack;
+    }
 
     public void deleteNode(){
         arrayCallBack.apply().remove(this);
@@ -239,7 +256,29 @@ public class NState {
                 transition.getTliteral().translateXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2).subtract(transition.getTliteral().widthProperty().divide(2)));
                 // Bind label's translate Y to the midpoint of the line's start and end Y minus an offset
                 transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
+
+
+                double startX = transition.getDestinationState().getCircle().getCenterX()+50;
+                double startY=transition.getDestinationState().getCircle().getCenterY();
+
+
+                        transition.getArrow().getPoints().addAll(
+                                startX+50, startY - 20,
+                                startX + 10, startY - 10,
+                                startX, startY
+                        );
+                double angle = Math.atan2(transition.getDestinationState().circle.getCenterY() - this.circle.getCenterY(), transition.getDestinationState().circle.getCenterX() - this.circle.getCenterX());
+                double endX = transition.getDestinationState().circle.getCenterX() - transition.getDestinationState().circle.getRadius() * Math.cos(angle);
+                double endY = transition.getDestinationState().circle.getCenterY() - transition.getDestinationState().circle.getRadius() * Math.sin(angle);
+
+                // Create line
+               // currentTransition.setLine(new Line(transition.getDestinationState().circle.getCenterX()+ transition.getDestinationState().circle.getRadius(), transition.getDestinationState().circle.getCenterY() , transition.getDestinationState().circle.getCenterX()+transition.getDestinationState().circle.getRadius() + 20, transition.getDestinationState().circle.getCenterY() ));
+
+
+
             });
+
+
         }
     }
 
@@ -252,6 +291,13 @@ public class NState {
         currentTransition.setTiteral(this.TransitionCallBack.apply());
     }
 
-
+    public void updateDestination(){
+        currentTransition.setDestinationState(this.getDestinationState.apply());
+    }
+    public void printDest(){
+        for(STransition transition : this.STransitions) {
+            System.out.println(transition.getDestinationState().getStateName().getText());
+        }
+    }
 }
 
