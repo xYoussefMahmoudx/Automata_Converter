@@ -1,5 +1,6 @@
 package com.example.automataconverter;
 
+import callbackinterfaces.CanvasCallBack;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,6 +66,7 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
+                s.setCanvasCallBack(()->returnCanvas());
                 s.setShowTransitionScreen(()-> {
                     try {
                         showTransitionScreen(s);
@@ -89,6 +91,7 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
+                s.setCanvasCallBack(()->returnCanvas());
                 s.setShowTransitionScreen(()-> {
                     try {
                         showTransitionScreen(s);
@@ -119,7 +122,7 @@ public class NfaCanvas {
                 s.setAnchorCallBack(()->returnAnchorFunction());
                 s.setArrayCallBack(()->returnArrayFunction());
                 s.setUpdateTransition(()->returnAnchorFunction());
-
+                s.setCanvasCallBack(()->returnCanvas());
                 s.setShowTransitionScreen(()-> {
                     try {
                         showTransitionScreen(s);
@@ -175,6 +178,9 @@ public class NfaCanvas {
 }
     public  ArrayList returnArrayFunction() {
         return Nodes;
+    }
+    public NfaCanvas returnCanvas() {
+        return this;
     }
 
 

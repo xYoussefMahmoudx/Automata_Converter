@@ -6,6 +6,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -21,6 +23,7 @@ public class NState {
     private UpdateTransition updateTransition;
     private ShowTransitionScreen showTransitionScreen;
     private GetDestinationState getDestinationState;
+    private CanvasCallBack canvasCallBack;
     private ArrayList<STransition> STransitions = new ArrayList<STransition>();
     private STransition currentTransition;
 
@@ -45,6 +48,7 @@ public class NState {
         onNormalClicked();
         onFinalClicked();
         onStartClicked();
+        onEditClicked();
         onNodeDragged();
         onRemoveClicked();
         onTransitionClicked();
@@ -92,6 +96,7 @@ public class NState {
     }
     private void addTransition(){
         STransition transition =new STransition();
+        transition.setArrayTransition(()-> STransitions);
         transition.setLine(new Line(this.circle.getCenterX()+ this.circle.getRadius(), this.circle.getCenterY() , this.circle.getCenterX()+this.circle.getRadius() + 20, this.circle.getCenterY() ));
         double startX = this.circle.getCenterX()+50;
         double startY=circle.getCenterY();
@@ -101,7 +106,7 @@ public class NState {
                 startX, startY
 
         );
-
+        transition.setUpdateTransition(()-> updateTransition.apply());
         updateTransition.apply().getChildren().add(transition.getArrow());
         updateTransition.apply().getChildren().add(transition.getLine());
         updateTransition.apply().getChildren().add(transition.getTliteral());
@@ -174,9 +179,26 @@ public class NState {
         sideMenu.getsLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 for (NState state:this.arrayCallBack.apply()) {
-                    System.out.println("hi from loop");
                     if (state.getStateType().equals(StateType.Start)&&!state.equals(this)) {
                         state.makeNormal();
+                        break;
+                    }
+                }
+                makeStart();
+            }
+
+        });
+    }
+    private void onEditClicked(){
+        sideMenu.geteLabel().setOnMouseClicked(e-> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+                for (NState state:this.arrayCallBack.apply()) {
+                    if (state.equals(this)) {
+                        try {
+                            state.canvasCallBack.apply().showStateNameScreen(state);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     }
                 }
@@ -287,6 +309,9 @@ public class NState {
     }
     public void setGetDestinationState(GetDestinationState callBack){
         this.getDestinationState=callBack;
+    }
+    public void setCanvasCallBack(CanvasCallBack callBack){
+        this.canvasCallBack=callBack;
     }
     //setter Functions
     public void setStateName(String stateName) {
