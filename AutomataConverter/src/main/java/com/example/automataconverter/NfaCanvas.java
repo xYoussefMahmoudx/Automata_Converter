@@ -15,9 +15,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import nfatodfa.DFAConverter;
+import nfatodfa.NFA;
+import nfatodfa.State;
+import nfatodfa.Transition;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NfaCanvas {
 
@@ -35,10 +40,41 @@ public class NfaCanvas {
     private Parent root;
     private Stage stage;
     private Scene scene;
+
+
 //Convert to DFA Button
     @FXML
     void convertToDFA(ActionEvent event) {
+        NFA nfa=getNFA();
+        System.out.println(nfa);
+        DFAConverter converter = new DFAConverter(nfa, true);
+        List<List<State>> transitionTable = converter.convertToDFA();
+        printTable(converter.getNfa(), transitionTable);
 
+
+    }
+    public static void printTable(NFA nfa, List<List<State>> transitionTable) {
+        System.out.println("--- Transition Table ---");
+        System.out.print("\tState \t");
+        StringBuilder sb = new StringBuilder();
+        for (char s : nfa.getAlphabets())
+            sb.append(s).append("\t\t");
+        sb.setLength(sb.length() - 2);
+        System.out.println(sb.append("\t"));
+
+        System.out.println("--------------------------");
+
+        for (List<State> row : transitionTable) {
+            System.out.print("\t");
+            for (int i = 0; i < row.size(); i++) {
+                if (nfa.getStateType(row.get(i)) == nfatodfa.StateType.FINAL && i == 0)
+                    System.out.print("* ");
+                else if (nfa.getInitialState() == row.get(i) && i == 0)
+                    System.out.print("> ");
+                System.out.print(row.get(i) + "\t\t");
+            }
+            System.out.println();
+        }
     }
 // onAction Event Functions
     @FXML
@@ -163,6 +199,42 @@ public class NfaCanvas {
         c.setGetSourceNode(()->{return state;});
         c.setStage(stage);
         dataComboBox(c.getDropDownMenu());
+    }
+
+    public NFA getNFA(){
+        NFA nfa=new NFA();
+        ArrayList<State>states=new ArrayList<>();
+        ArrayList<ArrayList<Transition>>transitions=new ArrayList<>();
+        for (NState node:Nodes){
+            states.add(new State(node.getStateName().getText()));
+            nfa.addState(states.get(states.size()-1));
+            if(node.getStateType().equals(StateType.Start)){
+                nfa.setInitialState(states.get(states.size()-1));
+            }
+            if(node.getStateType().equals(StateType.Final)){
+                nfa.addFinalState(states.get(states.size()-1));
+            }
+
+        }
+
+        for (NState node:Nodes){
+            ArrayList<Transition>tempArray=new ArrayList<>();
+            for (STransition transition:node.getTransitionSTransitions()){
+                tempArray.add(new Transition(transition.getTliteral().getText().charAt(0),states.get(Nodes.indexOf(transition.getDestinationState()))));
+            }
+            transitions.add(tempArray);
+
+
+
+        }int i=0;
+        for (ArrayList<Transition> arr :transitions){
+
+            for (Transition tran :arr){
+                nfa.addTransition(states.get(i),tran.getAlphabet(),tran.getNextState());
+            }
+            i++;
+        }
+            return nfa;
     }
     //Function used in External Screen
     private void dataComboBox(ComboBox dropDownMenu) {

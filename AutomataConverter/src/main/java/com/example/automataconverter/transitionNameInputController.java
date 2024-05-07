@@ -28,9 +28,6 @@ public class transitionNameInputController   {
     private ComboBox dropDownMenu;
 
     @FXML
-    private CheckBox epsilonCheck;
-
-    @FXML
     private Label errorLabel;
 
     @FXML
