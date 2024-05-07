@@ -11,11 +11,13 @@ public class NSideMenu {
     private Label nLabel  = new Label("Normal");
     private Label sLabel  = new Label("Start");
     private Label tLabel  = new Label("Transition");
+    private Label eLabel  = new Label("edit");
     private CustomMenuItem fItem= new CustomMenuItem(fLabel);
     private CustomMenuItem nItem= new CustomMenuItem(nLabel);
     private CustomMenuItem rItem= new CustomMenuItem(rLabel);
     private CustomMenuItem sItem= new CustomMenuItem(sLabel);
     private CustomMenuItem tItem= new CustomMenuItem(tLabel);
+    private CustomMenuItem eItem= new CustomMenuItem(eLabel);
     private ContextMenu menu;
     NSideMenu(){
         this.menu = new ContextMenu();
@@ -25,9 +27,11 @@ public class NSideMenu {
     private void createMenu(){
         menu.getItems().add(rItem);
         menu.getItems().add(tItem);
+        menu.getItems().add(eItem);
         menu.getItems().add(fItem);
         menu.getItems().add(nItem);
         menu.getItems().add(sItem);
+
 
     }
 
@@ -52,6 +56,10 @@ public class NSideMenu {
     }
     public Label getsLabel() {
         return sLabel;
+    }
+
+    public Label geteLabel() {
+        return eLabel;
     }
 
     public CustomMenuItem getfItem() {
