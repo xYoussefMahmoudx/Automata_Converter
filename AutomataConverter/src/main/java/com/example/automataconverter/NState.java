@@ -190,16 +190,28 @@ public class NState {
                 transition.getTliteral().translateXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2).subtract(transition.getTliteral().widthProperty().divide(2)));
                 // Bind label's translate Y to the midpoint of the line's start and end Y minus an offset
                 transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
-                double startX = transition.getDestinationState().getCircle().getCenterX()+50;
-                double startY=transition.getDestinationState().getCircle().getCenterY();
-                transition.getArrow().getPoints().addAll(
-                        startX+50, startY - 20,
+
+
+                currentTransition.getLine().setStartX(this.circle.getCenterX()+ this.circle.getRadius());
+                currentTransition.getLine().setStartY(this.circle.getCenterY());
+                currentTransition.getLine().setEndX(currentTransition.getDestinationState().circle.getCenterX()-50);
+                currentTransition.getLine().setEndY(currentTransition.getDestinationState().circle.getCenterY());
+
+                double startX = currentTransition.getLine().getEndX();
+                double startY=currentTransition.getLine().getEndY();
+                double arrowMidX = startX;
+                double arrowMidY = startY - 9;
+
+                currentTransition.getArrow().getPoints().setAll(
+                        startX, startY - 20,
                         startX + 10, startY - 10,
                         startX, startY
+
                 );
-                double angle = Math.atan2(transition.getDestinationState().circle.getCenterY() - this.circle.getCenterY(), transition.getDestinationState().circle.getCenterX() - this.circle.getCenterX());
-                double endX = transition.getDestinationState().circle.getCenterX() - transition.getDestinationState().circle.getRadius() * Math.cos(angle);
-                double endY = transition.getDestinationState().circle.getCenterY() - transition.getDestinationState().circle.getRadius() * Math.sin(angle);
+
+                currentTransition.getLine().setEndX(arrowMidX);
+                currentTransition.getLine().setEndY(arrowMidY);
+
             });
         }
     }
