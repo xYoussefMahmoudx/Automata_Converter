@@ -143,7 +143,11 @@ public class NState {
     private void onRemoveClicked(){
         sideMenu.getrLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                anchorPaneCallBack.apply().getChildren().removeAll(this.innerCircle,this.circle);
+                anchorPaneCallBack.apply().getChildren().removeAll(this.innerCircle,this.circle,this.stateName);
+                for (STransition transition :STransitions){
+                    anchorPaneCallBack.apply().getChildren().removeAll(transition.getLine(),transition.getArrow(),transition.getTliteral());
+                }
+
                 deleteNode();
             }
         });
