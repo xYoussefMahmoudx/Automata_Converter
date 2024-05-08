@@ -37,6 +37,8 @@ public class NfaCanvas {
                                             new CustomMenuItem(fLabel),
                                             new CustomMenuItem(nLabel));
     private ArrayList<NState> Nodes = new ArrayList<>();
+
+
     private Parent root;
     private Stage stage;
     private Scene scene;
@@ -44,12 +46,35 @@ public class NfaCanvas {
 
 //Convert to DFA Button
     @FXML
-    void convertToDFA(ActionEvent event) {
+    void convertToDFA(ActionEvent event) throws IOException{
         NFA nfa=getNFA();
         System.out.println(nfa);
         DFAConverter converter = new DFAConverter(nfa, true);
         List<List<State>> transitionTable = converter.convertToDFA();
         printTable(converter.getNfa(), transitionTable);
+
+        //Get all coords of previous states
+        ArrayList<Double> xCoords = new ArrayList<Double>();
+        ArrayList<Double> yCoords = new ArrayList<Double>();
+
+        for (int i = 0 ; i < Nodes.size() ; i++){
+            xCoords.add(Nodes.get(i).getCircle().getCenterX());
+            yCoords.add(Nodes.get(i).getCircle().getCenterY());
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getClassLoader().getResource(
+                        "dfa-screen.fxml"));
+        root = loader.load();
+        dfaScreenController c = loader.getController();
+        c.renderDFA(transitionTable,xCoords,yCoords);
+
+
+        stage = new Stage();
+        stage.setTitle("Result DFA");
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
 
     }

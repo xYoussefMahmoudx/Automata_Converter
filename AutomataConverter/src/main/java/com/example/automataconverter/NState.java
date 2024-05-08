@@ -26,7 +26,42 @@ public class NState {
     private CanvasCallBack canvasCallBack;
     private ArrayList<STransition> STransitions = new ArrayList<STransition>();
     private STransition currentTransition;
+    public NState(double radius,StateType stateType,double centerX, double centerY){
+        this.circle = new Circle(radius);
+        this.stateType=stateType;
+        innerCircle = new Circle();
+        this.sideMenu=new NSideMenu();
+        stateName = new Label();
+        stateName.toBack();
+        innerCircle.centerXProperty().bind(circle.centerXProperty());
+        innerCircle.centerYProperty().bind(circle.centerYProperty());
+        circle.setCenterX(centerX);
+        circle.setCenterY(centerY);
+        stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
+        stateName.setLayoutY(circle.getCenterY() - stateName.getHeight()/2);
+        for(STransition transition : STransitions) {
+            transition.setLine(new Line(circle.getCenterX(), circle.getCenterY() + circle.getRadius(), circle.getCenterX(), circle.getCenterY() + circle.getRadius() + 20));
+        }
 
+
+        createNode();
+        onNormalClicked();
+        onFinalClicked();
+        onStartClicked();
+        onEditClicked();
+        onNodeDragged();
+        onRemoveClicked();
+        onTransitionClicked();
+        if(this.stateType.equals(StateType.Final)){
+            makeFinal();
+        }else if(this.stateType.equals(StateType.Normal)){
+            makeNormal();
+        }else if(this.stateType.equals(StateType.Start)){
+            makeStart();
+        }
+
+
+    }
     public NState(double radius,StateType stateType) {
         this.circle = new Circle(radius);
         this.stateType=stateType;
@@ -316,6 +351,8 @@ public class NState {
     //setter Functions
     public void setStateName(String stateName) {
         this.stateName.setText(stateName);
+        this.stateName.setLayoutX(circle.getCenterX() - this.stateName.getWidth()/2);
+        this.stateName.setLayoutY(circle.getCenterY() - this.stateName.getHeight()/2);
     }
     private void setSideMenuRemove(StateType stateType){
         if(stateType.equals(StateType.Final)){
