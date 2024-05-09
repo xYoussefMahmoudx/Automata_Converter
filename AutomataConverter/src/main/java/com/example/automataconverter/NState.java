@@ -154,6 +154,42 @@ public class NState {
             }
         });
     }
+
+    public void addTransition(String literal, NState dst){
+        STransition transition = new STransition();
+        STransitions.add(transition);
+        transition.setDestinationState(dst);
+        transition.setTiteral(literal);
+        transition.setLine(new Line(this.circle.getCenterX()+ this.circle.getRadius(), this.circle.getCenterY() , this.circle.getCenterX()+this.circle.getRadius() + 20, this.circle.getCenterY() ));
+        double startX = this.circle.getCenterX()+50;
+        double startY=circle.getCenterY();
+        transition.getArrow().getPoints().addAll(
+                startX, startY - 20,
+                startX + 10, startY - 10,
+                startX, startY
+
+        );
+        transition.getTliteral().translateXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2).subtract(transition.getTliteral().widthProperty().divide(2)));
+        // Bind label's translate Y to the midpoint of the line's start and end Y minus an offset
+        transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
+        transition.getLine().setEndX(transition.getDestinationState().circle.getCenterX()-50);
+        transition.getLine().setEndY(transition.getDestinationState().circle.getCenterY());
+
+        double endX = transition.getLine().getEndX();
+        double endY=transition.getLine().getEndY();
+        double arrowMidX = endX;
+        double arrowMidY = endY - 9;
+
+        transition.getArrow().getPoints().setAll(
+                endX, endY - 20,
+                endX + 10, endY - 10,
+                endX, endY
+
+        );
+
+        transition.getLine().setEndX(arrowMidX);
+        transition.getLine().setEndY(arrowMidY);
+    }
     public void makeNormal(){
         if(!(this.stateType.equals(StateType.Normal))){
             setSideMenuAdd(this.stateType);
