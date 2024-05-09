@@ -1,6 +1,5 @@
 package com.example.automataconverter;
 
-import callbackinterfaces.CanvasCallBack;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,13 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import nfatodfa.DFAConverter;
-import nfatodfa.NFA;
-import nfatodfa.State;
-import nfatodfa.Transition;
+import nfatodfa.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +62,8 @@ public class NfaCanvas {
                         "dfa-screen.fxml"));
         root = loader.load();
         dfaScreenController c = loader.getController();
-        c.renderDFA(transitionTable,xCoords,yCoords);
+        Character arr[] = nfa.getAlphabets().toArray(new Character[0]);
+        c.renderDFA(transitionTable,xCoords,yCoords,arr);
 
 
         stage = new Stage();
@@ -114,7 +110,7 @@ public class NfaCanvas {
     private void onFinalClicked(){
         fLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Final);
+                NState s = new NState(50, GUIStateType.Final);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -141,7 +137,7 @@ public class NfaCanvas {
     private void onNormalClicked(){
         nLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Normal);
+                NState s = new NState(50, GUIStateType.Normal);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -166,7 +162,7 @@ public class NfaCanvas {
     private void onStartClicked()  {
         sLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Start);
+                NState s = new NState(50, GUIStateType.Start);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -174,7 +170,7 @@ public class NfaCanvas {
                 }
                 Nodes.add(s);
                 for (NState state:Nodes) {
-                    if (state.getStateType().equals(StateType.Start) && !state.equals(s)) {
+                    if (state.getStateType().equals(GUIStateType.Start) && !state.equals(s)) {
                         state.makeNormal();
                     }
                 }
@@ -226,17 +222,29 @@ public class NfaCanvas {
         dataComboBox(c.getDropDownMenu());
     }
 
+    private StateType convertToOtherStateType(GUIStateType type){
+        if(type == GUIStateType.Normal){
+            return StateType.NORMAL;
+        }
+        else if(type == GUIStateType.Final) {
+            return StateType.FINAL;
+        }
+        else if(type == GUIStateType.Start){
+            return StateType.INITIAL;
+        }
+        return null;
+    }
     public NFA getNFA(){
         NFA nfa=new NFA();
         ArrayList<State>states=new ArrayList<>();
         ArrayList<ArrayList<Transition>>transitions=new ArrayList<>();
         for (NState node:Nodes){
-            states.add(new State(node.getStateName().getText()));
+            states.add(new State(node.getStateName().getText(),convertToOtherStateType(node.getStateType())));
             nfa.addState(states.get(states.size()-1));
-            if(node.getStateType().equals(StateType.Start)){
+            if(node.getStateType().equals(GUIStateType.Start)){
                 nfa.setInitialState(states.get(states.size()-1));
             }
-            if(node.getStateType().equals(StateType.Final)){
+            if(node.getStateType().equals(GUIStateType.Final)){
                 nfa.addFinalState(states.get(states.size()-1));
             }
 

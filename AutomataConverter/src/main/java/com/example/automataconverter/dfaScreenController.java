@@ -4,10 +4,11 @@ import javafx.fxml.FXML;
 
 import javafx.scene.layout.AnchorPane;
 import nfatodfa.State;
+import nfatodfa.StateType;
 
 import java.util.ArrayList;
 import java.util.List;
-import nfatodfa.State;
+
 public class dfaScreenController {
     @FXML
     private AnchorPane dfaScreen;
@@ -15,12 +16,13 @@ public class dfaScreenController {
     private ArrayList<NState> DFAstates = new ArrayList<NState>();
     public void renderDFA(List<List<State>> transitionTable,
                           ArrayList<Double> xCoords,
-                          ArrayList<Double> yCoords){
+                          ArrayList<Double> yCoords,
+                          Character alphabets[]){
         if(transitionTable.size() > xCoords.size()){
             int i;
             //Render rest of states
             for(i = 0 ; i < xCoords.size() ; i++){
-                NState s = new NState(50,StateType.Normal,xCoords.get(i),yCoords.get(i));
+                NState s = new NState(50, convertToGUIStateType(transitionTable.get(i).get(0).getStateType()),xCoords.get(i),yCoords.get(i));
                 DFAstates.add(s);
                 s.setStateName(transitionTable.get(i).get(0).getName());
                 dfaScreen.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
@@ -28,7 +30,7 @@ public class dfaScreenController {
 
 
             //Render Extra State at fixed coordinate
-            NState s = new NState(50,StateType.Normal,50,50);
+            NState s = new NState(50, convertToGUIStateType(transitionTable.get(i).get(0).getStateType()),800,600);
             DFAstates.add(s);
             s.setStateName(transitionTable.get(i).get(0).getName());
             dfaScreen.getChildren().addAll(s.getCircle(), s.getInnerCircle(),s.getStateName());
@@ -36,7 +38,7 @@ public class dfaScreenController {
         else{
             //render the states
             for(int i = 0 ; i < transitionTable.size() ; i++){
-                NState s = new NState(50,StateType.Normal);
+                NState s = new NState(50, convertToGUIStateType(transitionTable.get(i).get(0).getStateType()));
                 DFAstates.add(s);
                 s.getCircle().setCenterX(xCoords.get(i));
                 s.getInnerCircle().setCenterX(xCoords.get(i));
@@ -51,14 +53,16 @@ public class dfaScreenController {
             State srcState = transitionTable.get(srcStateIndex).get(0);
             NState srcNState = getNState(srcState.getName());
             for (int dstStateIndex = 1 ; dstStateIndex < transitionTable.get(srcStateIndex).size() ; dstStateIndex++){
-                String literal = getTransitionLiteral(getNState(srcState.getName()),
-                        getNState(transitionTable.get(srcStateIndex).get(dstStateIndex).getName()));
+
                 NState dstState = getNState(transitionTable.get(srcStateIndex).get(dstStateIndex).getName());
                 //Add Transition between srcState and DstState Here
-                srcNState.addTransition(literal,dstState);
+                srcNState.addTransition(alphabets[dstStateIndex - 1].toString(), dstState);
+
             }
             for(STransition trans : srcNState.getTransitionSTransitions()){
-                dfaScreen.getChildren().addAll(trans.getLine(), trans.getArrow());
+                //trans.getTliteral().setText(getTransitionLiteral(getNState(srcState.getName()),
+                        //getNState(trans.getDestinationState().getStateName().getText())));
+                dfaScreen.getChildren().addAll(trans.getLine(), trans.getArrow(), trans.getTliteral());
             }
 
         }
@@ -83,5 +87,18 @@ public class dfaScreenController {
             }
         }
         return "?";
+    }
+
+    private GUIStateType convertToGUIStateType(StateType type){
+        if(type == StateType.FINAL){
+            return GUIStateType.Final;
+        }
+        else if(type == StateType.NORMAL) {
+            return GUIStateType.Normal;
+        }
+        else if(type == StateType.INITIAL){
+            return GUIStateType.Start;
+        }
+        return null;
     }
 }

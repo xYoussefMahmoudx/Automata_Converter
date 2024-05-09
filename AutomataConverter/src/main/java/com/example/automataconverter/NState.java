@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class NState {
     private Circle circle;
     private Circle innerCircle;
-    private StateType stateType;
+    private GUIStateType GUIStateType;
     private Label stateName;
     private NSideMenu sideMenu;
     private RemoveNode anchorPaneCallBack;
@@ -26,9 +26,9 @@ public class NState {
     private CanvasCallBack canvasCallBack;
     private ArrayList<STransition> STransitions = new ArrayList<STransition>();
     private STransition currentTransition;
-    public NState(double radius,StateType stateType,double centerX, double centerY){
+    public NState(double radius, GUIStateType GUIStateType, double centerX, double centerY){
         this.circle = new Circle(radius);
-        this.stateType=stateType;
+        this.GUIStateType = GUIStateType;
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
         stateName = new Label();
@@ -52,19 +52,19 @@ public class NState {
         onNodeDragged();
         onRemoveClicked();
         onTransitionClicked();
-        if(this.stateType.equals(StateType.Final)){
+        if(this.GUIStateType.equals(GUIStateType.Final)){
             makeFinal();
-        }else if(this.stateType.equals(StateType.Normal)){
+        }else if(this.GUIStateType.equals(GUIStateType.Normal)){
             makeNormal();
-        }else if(this.stateType.equals(StateType.Start)){
+        }else if(this.GUIStateType.equals(GUIStateType.Start)){
             makeStart();
         }
 
 
     }
-    public NState(double radius,StateType stateType) {
+    public NState(double radius, GUIStateType GUIStateType) {
         this.circle = new Circle(radius);
-        this.stateType=stateType;
+        this.GUIStateType = GUIStateType;
         innerCircle = new Circle();
         this.sideMenu=new NSideMenu();
         stateName = new Label();
@@ -87,11 +87,11 @@ public class NState {
         onNodeDragged();
         onRemoveClicked();
         onTransitionClicked();
-        if(this.stateType.equals(StateType.Final)){
+        if(this.GUIStateType.equals(GUIStateType.Final)){
             makeFinal();
-        }else if(this.stateType.equals(StateType.Normal)){
+        }else if(this.GUIStateType.equals(GUIStateType.Normal)){
             makeNormal();
-        }else if(this.stateType.equals(StateType.Start)){
+        }else if(this.GUIStateType.equals(GUIStateType.Start)){
             makeStart();
         }
 
@@ -112,11 +112,11 @@ public class NState {
         circle.setStrokeWidth(2);
     }
     private void makeFinal(){
-        if(!(this.stateType.equals(StateType.Final))){
-            setSideMenuAdd(this.stateType);
+        if(!(this.GUIStateType.equals(GUIStateType.Final))){
+            setSideMenuAdd(this.GUIStateType);
         }
-        this.stateType=StateType.Final;
-        setSideMenuRemove(this.stateType);
+        this.GUIStateType = GUIStateType.Final;
+        setSideMenuRemove(this.GUIStateType);
         this.circle.setStroke(Color.BLACK);
         innerCircle.setRadius(40); // Set smaller radius
         innerCircle.setFill(Color.WHITE); // White fill
@@ -172,6 +172,8 @@ public class NState {
         transition.getTliteral().translateXProperty().bind((transition.getLine().startXProperty().add(transition.getLine().endXProperty())).divide(2).subtract(transition.getTliteral().widthProperty().divide(2)));
         // Bind label's translate Y to the midpoint of the line's start and end Y minus an offset
         transition.getTliteral().translateYProperty().bind((transition.getLine().startYProperty().add(transition.getLine().endYProperty())).divide(2).subtract(20));
+
+        transition.getTliteral().setText(literal);
         transition.getLine().setEndX(transition.getDestinationState().circle.getCenterX()-50);
         transition.getLine().setEndY(transition.getDestinationState().circle.getCenterY());
 
@@ -191,20 +193,20 @@ public class NState {
         transition.getLine().setEndY(arrowMidY);
     }
     public void makeNormal(){
-        if(!(this.stateType.equals(StateType.Normal))){
-            setSideMenuAdd(this.stateType);
+        if(!(this.GUIStateType.equals(GUIStateType.Normal))){
+            setSideMenuAdd(this.GUIStateType);
         }
-        this.stateType=StateType.Normal;
-        setSideMenuRemove(this.stateType);
+        this.GUIStateType = GUIStateType.Normal;
+        setSideMenuRemove(this.GUIStateType);
         innerCircle.setStroke(Color.TRANSPARENT); // Black border
         this.circle.setStroke(Color.BLACK);
     }
     private void makeStart(){
-        if(!(this.stateType.equals(StateType.Start))){
-            setSideMenuAdd(this.stateType);
+        if(!(this.GUIStateType.equals(GUIStateType.Start))){
+            setSideMenuAdd(this.GUIStateType);
         }
-        this.stateType=StateType.Start;
-        setSideMenuRemove(this.stateType);
+        this.GUIStateType = GUIStateType.Start;
+        setSideMenuRemove(this.GUIStateType);
         innerCircle.setStroke(Color.TRANSPARENT);// Black border
         this.circle.setStroke(Color.RED);
     }
@@ -227,8 +229,8 @@ public class NState {
     public ArrayList<STransition> getTransitionSTransitions() {
         return STransitions;
     }
-    public StateType getStateType() {
-        return stateType;
+    public GUIStateType getStateType() {
+        return GUIStateType;
     }
 
     // onAction Event Functions
@@ -250,7 +252,7 @@ public class NState {
         sideMenu.getsLabel().setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 for (NState state:this.arrayCallBack.apply()) {
-                    if (state.getStateType().equals(StateType.Start)&&!state.equals(this)) {
+                    if (state.getStateType().equals(GUIStateType.Start)&&!state.equals(this)) {
                         state.makeNormal();
                         break;
                     }
@@ -390,24 +392,24 @@ public class NState {
         this.stateName.setLayoutX(circle.getCenterX() - this.stateName.getWidth()/2);
         this.stateName.setLayoutY(circle.getCenterY() - this.stateName.getHeight()/2);
     }
-    private void setSideMenuRemove(StateType stateType){
-        if(stateType.equals(StateType.Final)){
+    private void setSideMenuRemove(GUIStateType GUIStateType){
+        if(GUIStateType.equals(GUIStateType.Final)){
             sideMenu.removefLabel();
 
-        }else if(stateType.equals(StateType.Normal)){
+        }else if(GUIStateType.equals(GUIStateType.Normal)){
             sideMenu.removenLabel();
 
-        }else if(stateType.equals(StateType.Start)){
+        }else if(GUIStateType.equals(GUIStateType.Start)){
             sideMenu.removesLabel();
 
         }
     }
-    private void setSideMenuAdd(StateType stateType){
-        if(stateType.equals(StateType.Final)){
+    private void setSideMenuAdd(GUIStateType GUIStateType){
+        if(GUIStateType.equals(GUIStateType.Final)){
             sideMenu.addfLabel();
-        }else if(stateType.equals(StateType.Normal)){
+        }else if(GUIStateType.equals(GUIStateType.Normal)){
             sideMenu.addnLabel();
-        }else if(stateType.equals(StateType.Start)){
+        }else if(GUIStateType.equals(GUIStateType.Start)){
             sideMenu.addsLabel();
         }
     }

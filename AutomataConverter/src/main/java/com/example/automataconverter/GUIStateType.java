@@ -1,6 +1,6 @@
 package com.example.automataconverter;
 
-public enum StateType {
+public enum GUIStateType {
 
         Normal,
         Final,

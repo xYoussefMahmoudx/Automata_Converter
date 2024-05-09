@@ -2,19 +2,17 @@ package com.example.automataconverter;
 
 import callbackinterfaces.*;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class DState {
     private Circle circle;
     private Circle innerCircle;
-    private StateType stateType;
+    private GUIStateType GUIStateType;
     private Label stateName;
     private AddTransition TransitionCallBack;
     private UpdateTransition updateTransition;
@@ -23,9 +21,9 @@ public class DState {
     private CanvasCallBack canvasCallBack;
     private ArrayList<STransition> STransitions = new ArrayList<STransition>();
     private STransition currentTransition;
-    public DState(double radius,StateType stateType,double centerX, double centerY){
+    public DState(double radius, GUIStateType GUIStateType, double centerX, double centerY){
         this.circle = new Circle(radius);
-        this.stateType=stateType;
+        this.GUIStateType = GUIStateType;
         innerCircle = new Circle();
         stateName = new Label();
         stateName.toBack();
@@ -41,19 +39,19 @@ public class DState {
 
 
         createNode();
-        if(this.stateType.equals(StateType.Final)){
+        if(this.GUIStateType.equals(GUIStateType.Final)){
             makeFinal();
-        }else if(this.stateType.equals(StateType.Normal)){
+        }else if(this.GUIStateType.equals(GUIStateType.Normal)){
             makeNormal();
-        }else if(this.stateType.equals(StateType.Start)){
+        }else if(this.GUIStateType.equals(GUIStateType.Start)){
             makeStart();
         }
 
 
     }
-    public DState(double radius,StateType stateType) {
+    public DState(double radius, GUIStateType GUIStateType) {
         this.circle = new Circle(radius);
-        this.stateType=stateType;
+        this.GUIStateType = GUIStateType;
         innerCircle = new Circle();
         stateName = new Label();
         stateName.setLayoutX(circle.getCenterX() - stateName.getWidth()/2);
@@ -68,11 +66,11 @@ public class DState {
 
 
         createNode();
-        if(this.stateType.equals(StateType.Final)){
+        if(this.GUIStateType.equals(GUIStateType.Final)){
             makeFinal();
-        }else if(this.stateType.equals(StateType.Normal)){
+        }else if(this.GUIStateType.equals(GUIStateType.Normal)){
             makeNormal();
-        }else if(this.stateType.equals(StateType.Start)){
+        }else if(this.GUIStateType.equals(GUIStateType.Start)){
             makeStart();
         }
 
@@ -93,7 +91,7 @@ public class DState {
         circle.setStrokeWidth(2);
     }
     private void makeFinal(){
-        this.stateType=StateType.Final;
+        this.GUIStateType = GUIStateType.Final;
         this.circle.setStroke(Color.BLACK);
         innerCircle.setRadius(40); // Set smaller radius
         innerCircle.setFill(Color.WHITE); // White fill
@@ -120,12 +118,12 @@ public class DState {
 
     }
     public void makeNormal(){
-        this.stateType=StateType.Normal;
+        this.GUIStateType = GUIStateType.Normal;
         innerCircle.setStroke(Color.TRANSPARENT); // Black border
         this.circle.setStroke(Color.BLACK);
     }
     private void makeStart(){
-        this.stateType=StateType.Start;
+        this.GUIStateType = GUIStateType.Start;
         innerCircle.setStroke(Color.TRANSPARENT);// Black border
         this.circle.setStroke(Color.RED);
     }
@@ -142,8 +140,8 @@ public class DState {
     public ArrayList<STransition> getTransitionSTransitions() {
         return STransitions;
     }
-    public StateType getStateType() {
-        return stateType;
+    public GUIStateType getStateType() {
+        return GUIStateType;
     }
 
     // onAction Event Functions

@@ -112,7 +112,7 @@ public class DFAConverter {
     }
 
     private void addPhiRow() {
-        State phi = new State("Φ");
+        State phi = new State("Φ",StateType.NORMAL);
         List<State> row = new ArrayList<>();
         for (int i = 0; i <= nfa.getAlphabets().size(); i++)
             row.add(phi);
