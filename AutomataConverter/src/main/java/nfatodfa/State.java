@@ -5,7 +5,7 @@ import java.util.*;
 public class State {
     private String name;
     private List<Transition> transitions;
-    // private StateType stateType;
+    private StateType stateType;
 
     public State(String name) {
         this.name = name;
@@ -13,11 +13,11 @@ public class State {
         // this.stateType = StateType.NORMAL;
     }
 
-    // public State(String name, StateType stateType) {
-    // this.name = name;
-    // this.transitions = new ArrayList<>();
-    // this.stateType = stateType;
-    // }
+    public State(String name, StateType stateType) {
+    this.name = name;
+    this.transitions = new ArrayList<>();
+    this.stateType = stateType;
+    }
 
     public String getName() {
         return name;
@@ -32,13 +32,12 @@ public class State {
         return transitions;
     }
 
-    // public StateType getStateType() {
-    // return stateType;
-    // }
-    //
-    // public void setStateType(StateType stateType) {
-    // this.stateType = stateType;
-    // }
+     public StateType getStateType() {
+        return stateType;
+     }
+     public void setStateType(StateType stateType) {
+    this.stateType = stateType;
+    }
 
     public void sortTransitions() {
         this.transitions.sort(Comparator

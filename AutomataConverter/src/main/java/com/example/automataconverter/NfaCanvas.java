@@ -1,6 +1,5 @@
 package com.example.automataconverter;
 
-import callbackinterfaces.CanvasCallBack;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,13 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import nfatodfa.DFAConverter;
-import nfatodfa.NFA;
-import nfatodfa.State;
-import nfatodfa.Transition;
+import nfatodfa.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +32,8 @@ public class NfaCanvas {
                                             new CustomMenuItem(fLabel),
                                             new CustomMenuItem(nLabel));
     private ArrayList<NState> Nodes = new ArrayList<>();
+
+
     private Parent root;
     private Stage stage;
     private Scene scene;
@@ -44,12 +41,36 @@ public class NfaCanvas {
 
 //Convert to DFA Button
     @FXML
-    void convertToDFA(ActionEvent event) {
+    void convertToDFA(ActionEvent event) throws IOException{
         NFA nfa=getNFA();
         System.out.println(nfa);
         DFAConverter converter = new DFAConverter(nfa, true);
         List<List<State>> transitionTable = converter.convertToDFA();
         printTable(converter.getNfa(), transitionTable);
+
+        //Get all coords of previous states
+        ArrayList<Double> xCoords = new ArrayList<Double>();
+        ArrayList<Double> yCoords = new ArrayList<Double>();
+
+        for (int i = 0 ; i < Nodes.size() ; i++){
+            xCoords.add(Nodes.get(i).getCircle().getCenterX());
+            yCoords.add(Nodes.get(i).getCircle().getCenterY());
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getClassLoader().getResource(
+                        "dfa-screen.fxml"));
+        root = loader.load();
+        dfaScreenController c = loader.getController();
+        Character arr[] = nfa.getAlphabets().toArray(new Character[0]);
+        c.renderDFA(transitionTable,xCoords,yCoords,arr);
+
+
+        stage = new Stage();
+        stage.setTitle("Result DFA");
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
 
     }
@@ -89,7 +110,7 @@ public class NfaCanvas {
     private void onFinalClicked(){
         fLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Final);
+                NState s = new NState(50, GUIStateType.Final);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -116,7 +137,7 @@ public class NfaCanvas {
     private void onNormalClicked(){
         nLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Normal);
+                NState s = new NState(50, GUIStateType.Normal);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -141,7 +162,7 @@ public class NfaCanvas {
     private void onStartClicked()  {
         sLabel.setOnMouseClicked(e-> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                NState s = new NState(50,StateType.Start);
+                NState s = new NState(50, GUIStateType.Start);
                 try {
                     showStateNameScreen(s);
                 } catch (IOException ex) {
@@ -149,7 +170,7 @@ public class NfaCanvas {
                 }
                 Nodes.add(s);
                 for (NState state:Nodes) {
-                    if (state.getStateType().equals(StateType.Start) && !state.equals(s)) {
+                    if (state.getStateType().equals(GUIStateType.Start) && !state.equals(s)) {
                         state.makeNormal();
                     }
                 }
@@ -201,17 +222,29 @@ public class NfaCanvas {
         dataComboBox(c.getDropDownMenu());
     }
 
+    private StateType convertToOtherStateType(GUIStateType type){
+        if(type == GUIStateType.Normal){
+            return StateType.NORMAL;
+        }
+        else if(type == GUIStateType.Final) {
+            return StateType.FINAL;
+        }
+        else if(type == GUIStateType.Start){
+            return StateType.INITIAL;
+        }
+        return null;
+    }
     public NFA getNFA(){
         NFA nfa=new NFA();
         ArrayList<State>states=new ArrayList<>();
         ArrayList<ArrayList<Transition>>transitions=new ArrayList<>();
         for (NState node:Nodes){
-            states.add(new State(node.getStateName().getText()));
+            states.add(new State(node.getStateName().getText(),convertToOtherStateType(node.getStateType())));
             nfa.addState(states.get(states.size()-1));
-            if(node.getStateType().equals(StateType.Start)){
+            if(node.getStateType().equals(GUIStateType.Start)){
                 nfa.setInitialState(states.get(states.size()-1));
             }
-            if(node.getStateType().equals(StateType.Final)){
+            if(node.getStateType().equals(GUIStateType.Final)){
                 nfa.addFinalState(states.get(states.size()-1));
             }
 
