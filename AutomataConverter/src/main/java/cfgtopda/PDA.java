@@ -5,29 +5,29 @@ import java.util.*;
 public class PDA {
     private Stack<String> pdaStack = new Stack<>();
     private Set<String> finalStates = new HashSet<>();
-    private HashMap<String, List<Transition>> pda = new HashMap<>();
+    private HashMap<String, List<pdaTransition>> pda = new HashMap<>();
     private String epsilon;
     private int lastState = 3;
 
     public PDA(String epsilon) {
         this.epsilon = epsilon;
         //initial step of any PDA
-        Transition tr = new Transition("q1", epsilon, epsilon, "$");
-        List<Transition> trList = new LinkedList<Transition>();
+        pdaTransition tr = new pdaTransition("q1", epsilon, epsilon, "$");
+        List<pdaTransition> trList = new LinkedList<pdaTransition>();
         trList.add(tr);
         this.pda.put("q0", trList);
     }
 
     public void CFGToPDA(CFG cfg) {
         String startSymbol = cfg.getStartSymbol();
-        Transition tr = new Transition("q2", epsilon, epsilon, startSymbol);
-        List<Transition> trList = new LinkedList<>();
+        pdaTransition tr = new pdaTransition("q2", epsilon, epsilon, startSymbol);
+        List<pdaTransition> trList = new LinkedList<>();
         trList.add(tr);
         pda.put("q1", trList);
-        List<Transition> rulesTransitionList = new LinkedList<>();
+        List<pdaTransition> rulesTransitionList = new LinkedList<>();
         Set<String> terminalSymbols = cfg.getTerminalSymbols();
         for (String terminal : terminalSymbols) {
-            rulesTransitionList.add(new Transition("q2", terminal, terminal, epsilon));
+            rulesTransitionList.add(new pdaTransition("q2", terminal, terminal, epsilon));
         }
         HashMap<String, List<String>> cfgMap = cfg.getCfg();
         for (String key : cfgMap.keySet()) {
@@ -51,44 +51,44 @@ public class PDA {
                     }
                     for (List<String> l : allLists) {
                         if (l.size() == 1) {
-                            rulesTransitionList.add(new Transition("q2", epsilon, key, l.get(0)));
+                            rulesTransitionList.add(new pdaTransition("q2", epsilon, key, l.get(0)));
                         } else {
-                            Transition t = new Transition("q" + lastState, epsilon, key, l.get(l.size() - 1));
+                            pdaTransition t = new pdaTransition("q" + lastState, epsilon, key, l.get(l.size() - 1));
                             lastState++;
                             rulesTransitionList.add(t);
                             addComplexTransitions(l);
                         }
                     }
                 } else {
-                    Transition t = new Transition("q" + lastState, epsilon, key, value.get(value.size() - 1));
+                    pdaTransition t = new pdaTransition("q" + lastState, epsilon, key, value.get(value.size() - 1));
                     lastState++;
                     rulesTransitionList.add(t);
                     addComplexTransitions(value);
                 }
             } else {
-                rulesTransitionList.add(new Transition("q2", epsilon, key, value.get(0)));
+                rulesTransitionList.add(new pdaTransition("q2", epsilon, key, value.get(0)));
             }
         }
-        Transition lastTransition = new Transition("qf", epsilon, "$", epsilon);
+        pdaTransition lastTransition = new pdaTransition("qf", epsilon, "$", epsilon);
         rulesTransitionList.add(lastTransition);
         pda.put("q2", rulesTransitionList);
 
-        List<Transition> lastTransitionList = new LinkedList<>();
+        List<pdaTransition> lastTransitionList = new LinkedList<>();
         finalStates.add("qf");
     }
 
     private void addComplexTransitions(List<String> list) {
-        List<Transition> tList;
-        Transition t;
+        List<pdaTransition> tList;
+        pdaTransition t;
         for (int i = list.size() - 2; i > 0; i--) {
             tList = new LinkedList<>();
-            t = new Transition("q" + lastState, epsilon, epsilon, list.get(i));
+            t = new pdaTransition("q" + lastState, epsilon, epsilon, list.get(i));
             tList.add(t);
             pda.put("q" + String.valueOf(lastState - 1), tList);
             lastState++;
         }
         tList = new LinkedList<>();
-        t = new Transition("q2", epsilon, epsilon, list.get(0));
+        t = new pdaTransition("q2", epsilon, epsilon, list.get(0));
         tList.add(t);
         pda.put("q" + String.valueOf(lastState - 1), tList);
     }
@@ -96,8 +96,8 @@ public class PDA {
     public void printPDA() {
         for (String key : pda.keySet()) {
             System.out.println(key + ":");
-            List<Transition> v = pda.get(key);
-            for (Transition t : v) {
+            List<pdaTransition> v = pda.get(key);
+            for (pdaTransition t : v) {
                 System.out.println(t.toString());
             }
         }

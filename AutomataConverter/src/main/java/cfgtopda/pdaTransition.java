@@ -1,12 +1,12 @@
 package cfgtopda;
 
-public class Transition {
+public class pdaTransition {
     String destination;
     String inputSymbol;
     String stackTop;
     String pushedSymbol;
 
-    public Transition(String destination, String inputSymbol, String stackTop, String pushedSymbol) {
+    public pdaTransition(String destination, String inputSymbol, String stackTop, String pushedSymbol) {
         this.destination = destination;
         this.inputSymbol = inputSymbol;
         this.stackTop = stackTop;
